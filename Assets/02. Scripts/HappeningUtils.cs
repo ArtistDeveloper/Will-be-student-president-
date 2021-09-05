@@ -254,7 +254,7 @@ public class Utils : MonoBehaviour
         foreach (var evt in happeningStream)
         {
             //Debug.Log(happeningTitles[evt.Item2] + " " + IntToDateString(evt.Item1) + " " + DateType(evt.Item1));
-            Debug.Log(happeningTitles[evt.Item2] + " " + evt.Item1.ToString() + " " + DateType(evt.Item1));
+            Debug.Log(happeningTitles[evt.Item2] + " " + evt.Item1.ToString() + " " + IntToDateString(evt.Item1) + " " + DateType(evt.Item1));
         }
     }
     private bool IsVacation(int date)
@@ -339,12 +339,12 @@ public class Utils : MonoBehaviour
     {
         int year = 0, month = 1, day = 1;
         convertDate--;
-        year = dateNow / 365;
+        year = convertDate / 365;
         convertDate %= 365;
         convertDate++;
         for (month = 1; month <= 12; month++)
         {
-            if (dateNow <= Month[month])
+            if (convertDate <= Month[month])
             {
                 day = convertDate;
                 break;
