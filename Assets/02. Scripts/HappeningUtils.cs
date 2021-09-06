@@ -6,9 +6,9 @@ using System.Text;
 using System.Linq;
 using UnityEngine;
 
-public class Utils : MonoBehaviour
+public class HappeningUtils : MonoBehaviour
 {
-    public static Utils utils;
+    public static HappeningUtils happeningUtils;
 
     // happening 데이터
     private List<Tuple<int, int>> typeIdList;
@@ -34,10 +34,10 @@ public class Utils : MonoBehaviour
     private Tuple<int, int> summerVacRange, winterVacRange, springVacRange;
     private void Awake()
     {
-        if (utils == null)
+        if (happeningUtils == null)
         {
             Debug.Log("Util Class created successfully");
-            utils = this;
+            happeningUtils = this;
         }
         else
         {
