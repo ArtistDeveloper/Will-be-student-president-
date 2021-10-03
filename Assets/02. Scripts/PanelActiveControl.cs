@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PanelActiveControl : MonoBehaviour
 {
-    public GameObject contentsPanels;
-    public bool option;
+    public List<GameObject> contentsPanels;
+    public List<bool> activeOption;
     public void ButtonClick(){
-        contentsPanels.SetActive(option);
+        for(int i=0;i<contentsPanels.Count;i++){
+            contentsPanels[i].SetActive(activeOption[i]);
+        }
     }
 }
