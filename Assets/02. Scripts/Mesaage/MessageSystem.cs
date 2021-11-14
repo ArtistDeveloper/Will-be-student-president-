@@ -20,13 +20,14 @@ public class MessageSystem : MonoBehaviour
 
     IEnumerator TypeSentence(string sentence)
     {
-        Debug.Log("호출됐는데 왜 지랄이양");
+        WaitForSeconds waitForSecond = new WaitForSeconds(0.01f); //여기 코드에서 미리 생성해놓고
+
         foreach (char letter in sentence.ToCharArray())
         {
-            Debug.Log("호출됐는데 왜 지랄이양2");
             printDialogue += letter;
             dialgueText.text = printDialogue;
-            yield return null;
+            yield return waitForSecond;
+            // yield return null; 
         }
     }
 }
