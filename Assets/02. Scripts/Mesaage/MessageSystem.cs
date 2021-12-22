@@ -5,18 +5,29 @@ using UnityEngine.UI;
 
 public class MessageSystem : MonoBehaviour
 {
-    // 가비지 생기니 string buffer 사용해볼까. 일단 생산성이 중요하니 DoTween에셋을 써보자
-    string testText = "엄청나게 긴 텍스트 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ";
+    private Text dialgueText;
+    private string printDialogue = "";
+    private string testText = "엄청나게 긴 텍스트 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ";
 
     private void Start()
     {
-        Text text = GetComponent<Text>();
-        text.text = testText;
+        dialgueText = GetComponent<Text>();
+        dialgueText.text = printDialogue;
+
+        // StopAllCoroutines();
+        StartCoroutine(TypeSentence(testText));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator TypeSentence(string sentence)
     {
+        WaitForSeconds waitForSecond = new WaitForSeconds(0.01f); //여기 코드에서 미리 생성해놓고
 
+        foreach (char letter in sentence.ToCharArray())
+        {
+            printDialogue += letter;
+            dialgueText.text = printDialogue;
+            yield return waitForSecond;
+            // yield return null; 
+        }
     }
 }
