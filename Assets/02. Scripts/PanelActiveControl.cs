@@ -6,8 +6,11 @@ public class PanelActiveControl : MonoBehaviour
 {
     public List<GameObject> contentsPanels;
     public List<bool> activeOption;
-    public void ButtonClick(){
-        for(int i=0;i<contentsPanels.Count;i++){
+
+    public void ButtonClick()
+    {
+        for (int i = 0; i < contentsPanels.Count; i++)
+        {
             contentsPanels[i].SetActive(activeOption[i]);
         }
     }

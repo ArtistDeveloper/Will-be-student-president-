@@ -8,13 +8,15 @@ using UnityEngine;
 
 public class GetNextHappening : MonoBehaviour
 {
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
-    public void GetNext(){
+
+    public void GetNext()
+    {
         HappeningUtils.happeningUtils.DebugPrintHappening__(
             HappeningUtils.happeningUtils.GetNextHappening__());
     }

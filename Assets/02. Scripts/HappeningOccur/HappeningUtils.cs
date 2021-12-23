@@ -38,6 +38,7 @@ public class HappeningUtils : MonoBehaviour
     public String winterVactionStart, winterVactionEnd;
     public String springVactionStart, springVactionEnd;
     private int smvs, smve, wtvs, wtve, spvs, spve;
+
     private void Awake()
     {
         if (happeningUtils == null)
@@ -51,7 +52,8 @@ public class HappeningUtils : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
-    // Start is called before the first frame update
+
+
     void Start()
     {
         Debug.Log("Hello Utils!");
@@ -66,7 +68,7 @@ public class HappeningUtils : MonoBehaviour
 
         // 방학 기간 설정?
         Vacation = new List<Tuple<int, int>>();
-        
+
         (smvs, smve) = (StringToInt(summerVactionStart), StringToInt(summerVactionEnd));
         (wtvs, wtve) = (StringToInt(winterVactionStart), StringToInt(winterVactionEnd));
         (spvs, spve) = (StringToInt(springVactionStart), StringToInt(springVactionEnd));
@@ -91,6 +93,7 @@ public class HappeningUtils : MonoBehaviour
         MakeProgress();
         //Debug.Log(IntToDate(StringToInt("0/1/6") + 365)); // -> 1/1/6으로 출력
     }
+
 
     public void ReadData()
     {
@@ -189,6 +192,7 @@ public class HappeningUtils : MonoBehaviour
 
         return true;
     }
+
     // 이벤트 진행 순서 새로 만들기
     private void MakeProgress()
     {
@@ -242,7 +246,8 @@ public class HappeningUtils : MonoBehaviour
                     if (ID == -1)
                     {
                         ID = waitingHappeningsIdx[random.Next(0, waitingHappeningsIdx.Count())];
-                        while(ID == beforeIdx){
+                        while (ID == beforeIdx)
+                        {
                             ID = waitingHappeningsIdx[random.Next(0, waitingHappeningsIdx.Count())];
                         }
                     }
@@ -257,14 +262,18 @@ public class HappeningUtils : MonoBehaviour
     }
 
     // 다음 이벤트을 가져오는 함수
-    public Tuple<int,int> GetNextHappening__(){
-        if(happeningStream.Count <= presentHappeningIdx){
-            return new Tuple<int,int>(-1,-1);
+    public Tuple<int, int> GetNextHappening__()
+    {
+        if (happeningStream.Count <= presentHappeningIdx)
+        {
+            return new Tuple<int, int>(-1, -1);
         }
         return happeningStream[presentHappeningIdx++];
     }
+
     // 이벤트 디버그 출력
-    public void DebugPrintHappening__(Tuple<int,int> hpng){
+    public void DebugPrintHappening__(Tuple<int, int> hpng)
+    {
         if (hpng.Item2 == -1)
         {
             Debug.Log("No Happenings");
@@ -286,6 +295,7 @@ public class HappeningUtils : MonoBehaviour
         }
         return false;
     }
+
     private int GetRandomHappening(List<int> happeningList, int dateNow, int beforeIdx)
     {
         // happeningList는 이벤트 맵 key 가지고 있음
@@ -294,24 +304,29 @@ public class HappeningUtils : MonoBehaviour
         // 후보군의 날짜 범위안에 현재 날짜가 포함되는 이벤트들만 뽑기 후보군에 넣는 함수
         for (int i = 0; i < happeningList.Count(); i++)
         {
-            if(happeningList[i] == beforeIdx){
+            if (happeningList[i] == beforeIdx)
+            {
                 continue;
             }
-            if(happeningOccurCnt[happeningList[i]] <= 0){
+            if (happeningOccurCnt[happeningList[i]] <= 0)
+            {
                 continue;
             }
             bool flag = false;
-            foreach(var rangeEach in happeningOccurRange[happeningList[i]]){
-                if(rangeEach.Item1 <= dateNow && dateNow <= rangeEach.Item2){
+            foreach (var rangeEach in happeningOccurRange[happeningList[i]])
+            {
+                if (rangeEach.Item1 <= dateNow && dateNow <= rangeEach.Item2)
+                {
                     flag = true;
                     break;
                 }
             }
-            if(flag){
+            if (flag)
+            {
                 randomVal.Add(i);
             }
         }
-        if(randomVal.Count == 0)return -1;
+        if (randomVal.Count == 0) return -1;
 
 
         int idx = randomVal.ElementAt(random.Next(randomVal.Count)), ID = happeningList[idx];
@@ -320,6 +335,7 @@ public class HappeningUtils : MonoBehaviour
             return 0;
         return ID;
     }
+
     private List<Tuple<int, int>> GetDates(int ID, int type)
     {
         List<Tuple<int, int>> ret = new List<Tuple<int, int>>();
@@ -383,12 +399,14 @@ public class HappeningUtils : MonoBehaviour
         }
         return (new Tuple<int, int, int>(year, month, day));
     }
+
     // int값을 string으로 반환
     public string IntToDateString(int convertDate)
     {
         Tuple<int, int, int> date = IntToDate(convertDate);
         return date.Item1.ToString() + "/" + date.Item2.ToString() + "/" + date.Item3.ToString();
     }
+
     // 년/월/일 튜플을 int값으로 반환
     public int DateToInt(Tuple<int, int, int> convertDate)
     {
@@ -398,6 +416,7 @@ public class HappeningUtils : MonoBehaviour
         for (int i = 1; i < convertDate.Item2; i++) ret += Month[i];
         return ret;
     }
+
     // 년/월/일 문자열을 튜플로 반환
     public Tuple<int, int, int> StringToDate(String convertDate)
     {
@@ -410,16 +429,19 @@ public class HappeningUtils : MonoBehaviour
             Convert.ToInt32(dateList[2])
         );
     }
+
     // 년/월/일 문자열을 int값으로 반환
     public int StringToInt(String convertDate)
     {
         return DateToInt(StringToDate(convertDate));
     }
+
     // 요일 계산기
     public int DateType(int convertDate)
     {
         return ((convertDate - 1) % 7);
     }
+
     // 범위에서 랜덤 뽑기 (요일 범위 정하고, 거를 요일 비트연산으로 넣어서 전달)
     public int GetRandomInRange(List<Tuple<int, int>> rangeList, List<Tuple<int, int>> excludeRangeList = null, int excludeDateType = 0, int offset = 0)
     {
