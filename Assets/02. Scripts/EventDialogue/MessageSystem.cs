@@ -8,7 +8,6 @@ public class MessageSystem : MonoBehaviour
 {
     private Text dialgueText;
     private string printDialogue = "";
-    private string testText = "엄청나게 긴 텍스트 ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ";
     private Coroutine typeSentenceCoroutine;
     private static MessageSystem instance;
 
@@ -42,9 +41,6 @@ public class MessageSystem : MonoBehaviour
     {
         dialgueText = GetComponent<Text>();
         dialgueText.text = printDialogue;
-
-        // StopAllCoroutines();
-        // StartCoroutine(TypeSentence(testText));
     }
 
 
