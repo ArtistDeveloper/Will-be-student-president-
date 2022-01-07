@@ -9,10 +9,9 @@ using UnityEngine;
 public class SaveLoadManager : MonoBehaviour
 {
     public static SaveLoadManager instance = null;
-    TestScript testScript;      // -> 나중에 HappeningUtils가 되어야함
 
-    List<Tuple<int,int>> happeningStream;
-    int presentHappeningIdx;
+    List<Tuple<int,int>> savedHappeningStream;
+    int savedPresentHappeningIdx;
 
     [Serializable]
     public class GameData
@@ -24,9 +23,6 @@ public class SaveLoadManager : MonoBehaviour
         // 사용자의 스탯정보
         // 현재 지지자수(아직 애매)
         // 사용자가 본 대본번호(아직애매)
-
-        // 저장되어있던 순서 반환하는 함수
-        // 저장되어있던 이벤트 번호 반환하는 함수
     }
 
     private void Awake() 
@@ -43,8 +39,6 @@ public class SaveLoadManager : MonoBehaviour
                 Destroy(this.gameObject);
         }
 
-        // 이거 나중에 지워야함
-        testScript = this.GetComponent<TestScript>();
     }
 
 
@@ -60,12 +54,12 @@ public class SaveLoadManager : MonoBehaviour
 
         GameData gameData = new GameData();
 
-        gameData.happeningStream = testScript.GetHappeningStream();
-        gameData.presentHappeningIdx = testScript.GetPresentHappeningIdx();
+        gameData.happeningStream = HappeningUtils.instance.Get_happeningStream();
+        gameData.presentHappeningIdx = HappeningUtils.instance.GetHappeningIdx();
 
         Debug.Log("이거 저장한다");
-        Debug.Log(testScript.GetHappeningStream().Count);
-        Debug.Log(testScript.GetPresentHappeningIdx());
+        Debug.Log(HappeningUtils.instance.Get_happeningStream().Count);
+        Debug.Log(HappeningUtils.instance.GetHappeningIdx());
        
         bf.Serialize(file, gameData);
         file.Close();
@@ -83,12 +77,12 @@ public class SaveLoadManager : MonoBehaviour
             // 파일 역질렬화해서 GameData에 담기
             GameData  gameData = (GameData)bf.Deserialize(file);
 
-            happeningStream = gameData.happeningStream;
-            presentHappeningIdx = gameData.presentHappeningIdx;
+            savedHappeningStream = gameData.happeningStream;
+            savedPresentHappeningIdx = gameData.presentHappeningIdx;
 
             Debug.Log("이거 불러왔다");
-            Debug.Log(happeningStream.Count);
-            Debug.Log(presentHappeningIdx);
+            Debug.Log(savedHappeningStream.Count);
+            Debug.Log(savedPresentHappeningIdx);
 
             // To Do: 여기에 불러왔을 때 게임 진행하는 함수 넣어서 그 함수에서 이벤트 발생순서 등 저장했던 내용 받아가면 될듯
         }
@@ -98,12 +92,12 @@ public class SaveLoadManager : MonoBehaviour
 
     public List<Tuple<int, int>> LoadHapeeningStream()
     {
-        return happeningStream;
+        return savedHappeningStream;
     }
 
     public int LoadPresentHapeeningIdx()
     {
-        return presentHappeningIdx;
+        return savedPresentHappeningIdx;
     }
 
 }
