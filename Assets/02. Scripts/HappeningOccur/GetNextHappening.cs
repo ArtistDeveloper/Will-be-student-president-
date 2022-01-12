@@ -50,19 +50,19 @@ public class GetNextHappening : MonoBehaviour
 
         HappeningUtils.instance.DebugPrintHappening__(
             HappeningUtils.instance.GetPresentHappening__());
-        if(HappeningUtils.instance.GetPresentHappening__().Item2 == 114){ // 이 if는 대화 있는 이벤트만 출력하기 위해서 있는거. 나중에 지울거
+
         ReadHappeningScripts(
             MakeFilePath(HappeningUtils.instance.GetPresentHappening__().Item2.ToString())
         );
         if(fastNextDialogPrint){
             PrintNextScripts();
         }
-        }// <- 지울거
+
         HappeningUtils.instance.IncreaseHappeningIdx();
     }
 
 
-    
+
 
     // ANCHOR ReadHappeningScripts
     /// <summary>
@@ -89,45 +89,60 @@ public class GetNextHappening : MonoBehaviour
         // 아래 주석 없애면 선택지 부분 넘어가면 선택지 이전 대화를 볼 수 없음.
         //txtScripts.Clear();
         //txtScriptsIndex = 0;
-
-        StreamReader happeningsTxtScripts = new StreamReader(
-            new FileStream(filePath, FileMode.Open));
-        string line = "";
-        while (happeningsTxtScripts.EndOfStream != true)
+        try
         {
-            line = happeningsTxtScripts.ReadLine();
-            // 주석 거르기
-            if (line.Length == 0) continue;
-            if (line.Length <= 2 || (line[0] == '/' && line[1] == '/')) continue;
-            if (line == "BRANCH")
+            StreamReader happeningsTxtScripts = new StreamReader(
+                new FileStream(filePath, FileMode.Open));
+            string line = "";
+            while (happeningsTxtScripts.EndOfStream != true)
             {
-                branchFlag = true;
-                
-                // 질문지 제목
-                ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
-
-                // 선택지 개수
-                int count = int.Parse(happeningsTxtScripts.ReadLine());
-
-                // 선택지 텍스트 채우기
-                for (int i = 0; i < count; i++)
+                line = happeningsTxtScripts.ReadLine();
+                // 주석 거르기
+                if (line.Length == 0) continue;
+                if (line.Length <= 2 || (line[0] == '/' && line[1] == '/')) continue;
+                if (line == "BRANCH")
                 {
-                    ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
+                    branchFlag = true;
+
+                    // 질문지 제목
+                    ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
+
+                    // 선택지 개수
+                    int count = int.Parse(happeningsTxtScripts.ReadLine());
+
+                    // 선택지 텍스트 채우기
+                    for (int i = 0; i < count; i++)
+                    {
+                        ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
+                    }
+
+                    // 분기 파일 이름 채우기
+                    for (int i = 0; i < count; i++)
+                    {
+                        branchFilePath[i] = happeningsTxtScripts.ReadLine();
+                    }
                 }
-
-                // 분기 파일 이름 채우기
-                for (int i = 0; i < count; i++)
+                else
                 {
-                    branchFilePath[i] = happeningsTxtScripts.ReadLine();
+                    txtScripts.Add(line);
+                    branchFlag = false;
                 }
             }
-            else
-            {
-                txtScripts.Add(line);
-                branchFlag = false;
-            }
+            happeningsTxtScripts.Close();
         }
-        happeningsTxtScripts.Close();
+        catch(FileNotFoundException e){
+            Debug.Log(e);
+            txtScripts.Add("해당 대화 스크립트가 존재하지 않습니다.");
+        }
+        catch(DirectoryNotFoundException e){
+            Debug.Log(e);
+            txtScripts.Add("해당 대화 스크립트 폴더가 존재하지 않습니다.");
+        }
+        catch(IOException e){
+            Debug.Log(e);
+            txtScripts.Add("대화 스크립트 형식이 잘못되었습니다.");
+        }
+        choiceIng = false;
     }
 
 
@@ -145,10 +160,10 @@ public class GetNextHappening : MonoBehaviour
         choiceIng = true;
         ChoiceManager.instance.ShowChoice();
         yield return new WaitUntil(() => !ChoiceManager.instance.choiceIng);
-        choiceIng = false;
         ReadHappeningScripts(
             MakeFilePath(branchFilePath[ChoiceManager.instance.GetResult()])
         );
+        yield return new WaitUntil(() => !choiceIng);
         if(fastNextDialogPrint){
             PrintNextScripts();
         }
