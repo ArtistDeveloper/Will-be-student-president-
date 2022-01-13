@@ -243,6 +243,8 @@ public class HappeningUtils : MonoBehaviour
         happeningStream = new List<Tuple<int, int>>();
         happeningOccurCnt = new Dictionary<int, int>(happeningOccurCntConst); // 값 변경되서 복제 딕셔너리를 만들어야 함
         presentHappeningIdx = 0; // happeningStream 가리키는 인덱스를 0으로 초기화
+        Debug.Log("현재이벤트번호초기화");
+        Debug.Log(presentHappeningIdx);
 
         // 고정 이벤트들 미리 할당하기
         typeIdList.Sort();
@@ -307,24 +309,7 @@ public class HappeningUtils : MonoBehaviour
     }
 
 
-    // ANCHOR LoadProgress
-    /// <summary>
-    /// 이벤트 진행상황 불러오기
-    /// 
-    /// 로드,저장 관련 스크립트로부터
-    /// Tuple[List[Tuple[int, int]], int]
-    /// 위의 형식의 데이터를 받아
-    /// 리스트는 happeningStream에,
-    /// int는 presentHappeningIdx에 저장
-    /// </summary>
-    public void LoadProgress()
-    {
-        // happeningStream = script.ProgressLoad(); // 예시 문장
-        // presentHappeningIdx =  script.PresentIdxLoad(); // 예시문장
-    }
-
-
-    
+ 
 
 
 
@@ -335,8 +320,11 @@ public class HappeningUtils : MonoBehaviour
     /// 현재 presentHappeningIdx를 반환함
     /// </summary>
     /// <returns></returns>
-    public int GetHappeningIdx(){
+    public int GetPresentHappeningIdx(){
         return presentHappeningIdx;
+    }
+    public void SetPresentHappeningIdx(int savedPresentHappeningIdx){
+        presentHappeningIdx = savedPresentHappeningIdx;
     }
 
     /// <summary>
@@ -348,9 +336,14 @@ public class HappeningUtils : MonoBehaviour
     /// <returns>
     /// 리스트[튜플[발생일,이벤트키]]
     /// </returns>
-    public List<Tuple<int,int>> Get_happeningStream()
+    public List<Tuple<int,int>> GetHappeningStream()
     {
         return new List<Tuple<int, int>>(happeningStream);
+    }
+
+    public void SetHappeningStream(List<Tuple<int, int>>  savedHappeningStream)
+    {
+        happeningStream = savedHappeningStream;
     }
 
 

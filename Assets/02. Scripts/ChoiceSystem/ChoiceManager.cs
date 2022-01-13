@@ -79,6 +79,9 @@ public class ChoiceManager : MonoBehaviour
     public void Add_answerList(string line){
         answerList.Add(line);
     }
+    public void Clear_answerList(){
+        answerList.Clear();
+    }
     public List<string> Get_answerList(){
         return answerList;
     }
