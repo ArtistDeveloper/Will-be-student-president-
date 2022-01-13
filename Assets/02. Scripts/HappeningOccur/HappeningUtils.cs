@@ -27,7 +27,7 @@ public class HappeningUtils : MonoBehaviour
     /// happeningOccurRange : HappeningData.txt의 ID와 발생날짜 시작~끝 리스트를 연결하는 딕셔너리
     /// </summary>
     private List<Tuple<int, int>> typeIdList;
-    public Dictionary<int, string> happeningTitles;
+    private Dictionary<int, string> happeningTitles;
     private Dictionary<int, Tuple<int, int, int>> happeningOccurType; // id : exc date | occur % | type
     private Dictionary<int, int> happeningOccurCntConst; // 발생 횟수 저장용
     private Dictionary<int, int> happeningOccurCnt; // 발생 횟수 계산용
@@ -47,7 +47,7 @@ public class HappeningUtils : MonoBehaviour
 
 
     // 이벤트 순서
-    public List<Tuple<int, int>> happeningStream; // 왼쪽은 날짜(int), 오른쪽은 데이터베이스 id
+    private List<Tuple<int, int>> happeningStream; // 왼쪽은 날짜(int), 오른쪽은 데이터베이스 id
     // 현재 날짜, happeningStream next값 가져오기 위한 변수(present~~)
     private int dateNow, presentHappeningIdx;
 
@@ -62,7 +62,7 @@ public class HappeningUtils : MonoBehaviour
     public String summerVactionStart, summerVactionEnd;
     public String winterVactionStart, winterVactionEnd;
     public String springVactionStart, springVactionEnd;
-    private int smvs, smve, wtvs, wtve, spvs, spve;
+    private int smvs, smve, wtvs, wtve, spvs, spve; // int로 변환된 0년째 방학 날짜들
 
 
 
@@ -305,6 +305,7 @@ public class HappeningUtils : MonoBehaviour
         }
         happeningStream = happeningStream.OrderBy(x => x.Item1).ThenBy(x => x.Item2).ToList();
     }
+
 
     // ANCHOR LoadProgress
     /// <summary>

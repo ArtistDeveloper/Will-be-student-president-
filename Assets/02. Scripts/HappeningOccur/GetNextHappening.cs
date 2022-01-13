@@ -50,108 +50,15 @@ public class GetNextHappening : MonoBehaviour
 
         HappeningUtils.instance.DebugPrintHappening__(
             HappeningUtils.instance.GetPresentHappening__());
-        if(HappeningUtils.instance.GetPresentHappening__().Item2 == 114){ // 이 if는 대화 있는 이벤트만 출력하기 위해서 있는거. 나중에 지울거
+
         ReadHappeningScripts(
             MakeFilePath(HappeningUtils.instance.GetPresentHappening__().Item2.ToString())
         );
         if(fastNextDialogPrint){
             PrintNextScripts();
         }
-        }// <- 지울거
+
         HappeningUtils.instance.IncreaseHappeningIdx();
-    }
-
-
-    
-
-    // ANCHOR ReadHappeningScripts
-    /// <summary>
-    /// 읽을 이벤트 파일 이름을 받아서 해당 대화 스크립트를 읽고,
-    /// txtScripts의 리스트 스트링 변수에 저장한다.
-    /// 
-    /// 만약 파일을 읽다가 BRANCH라는 명령어가 있으면
-    /// 질문지에 적힐 텍스트
-    /// 선택지 개수
-    /// 선택지에 적힐 텍스트 * 선택지 개수
-    /// 선택지 선택 후 이동할 텍스트파일명 * 선택지 개수
-    /// 를 읽어 각각
-    /// ChoiceSystem/Choice.cs의 string question
-    /// GetNextHappening.cs의 count
-    /// ChoiceSystem/Choice.cs의 List[string] answerList
-    /// GetNextHappening.cs의 branchFilePath
-    /// 에 저장한다.
-    /// </summary>
-    /// <param name="happening">
-    /// GetNext, BranchWaitCoroutine 함수로부터 받은 이벤트 대화 파일 이름
-    /// </param>
-    public void ReadHappeningScripts(string filePath)
-    {
-        // 아래 주석 없애면 선택지 부분 넘어가면 선택지 이전 대화를 볼 수 없음.
-        //txtScripts.Clear();
-        //txtScriptsIndex = 0;
-
-        StreamReader happeningsTxtScripts = new StreamReader(
-            new FileStream(filePath, FileMode.Open));
-        string line = "";
-        while (happeningsTxtScripts.EndOfStream != true)
-        {
-            line = happeningsTxtScripts.ReadLine();
-            // 주석 거르기
-            if (line.Length == 0) continue;
-            if (line.Length <= 2 || (line[0] == '/' && line[1] == '/')) continue;
-            if (line == "BRANCH")
-            {
-                branchFlag = true;
-                
-                // 질문지 제목
-                ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
-
-                // 선택지 개수
-                int count = int.Parse(happeningsTxtScripts.ReadLine());
-
-                // 선택지 텍스트 채우기
-                for (int i = 0; i < count; i++)
-                {
-                    ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
-                }
-
-                // 분기 파일 이름 채우기
-                for (int i = 0; i < count; i++)
-                {
-                    branchFilePath[i] = happeningsTxtScripts.ReadLine();
-                }
-            }
-            else
-            {
-                txtScripts.Add(line);
-                branchFlag = false;
-            }
-        }
-        happeningsTxtScripts.Close();
-    }
-
-
-    // ANCHOR BranchWaitCoroutine
-    /// <summary>
-    /// 대화 파일을 읽었을 때 BRANCH라는 선택지 플래그가 있을 때,
-    /// branchFlag가 true가 되고, 대화를 끝까지 읽은 후 선택지 창이 나올 때
-    /// 실행되어 ChoiceManager에서 선택지 선택을 완료할 때 까지 기다리고
-    /// 각 선택지에 맞는 선택 후 대화 파일을 읽어 출력할 수 있도록
-    /// MakeFilePath에 파일 이름을 전달한다.
-    /// </summary>
-    /// <returns>ChoiceManager에서 선택을 완료할 때 까지 기다리기</returns>
-    IEnumerator BranchWaitCoroutine()
-    {
-        choiceIng = true;
-        ChoiceManager.instance.ShowChoice();
-        yield return new WaitUntil(() => !ChoiceManager.instance.choiceIng);
-        choiceIng = false;
-        ReadHappeningScripts(
-            MakeFilePath(branchFilePath[ChoiceManager.instance.GetResult()])
-        );
-        if(fastNextDialogPrint){
-            PrintNextScripts();
-        }
     }
 
 
@@ -159,7 +66,6 @@ public class GetNextHappening : MonoBehaviour
     /// <summary>
     /// 다음 대화를 출력
     /// </summary>
-    
     public void PrintNextScripts()
     {
         if (txtScripts == null) return;
@@ -200,6 +106,7 @@ public class GetNextHappening : MonoBehaviour
         }
     }
 
+
     // ANCHOR PrintBackScripts
     /// <summary>
     /// 이전 대화를 출력
@@ -219,7 +126,7 @@ public class GetNextHappening : MonoBehaviour
         nextDayWarning.SetActive(nextDayFlag);
     }
     
-    IEnumerator TypingDialogCoroutine(string line)
+    private IEnumerator TypingDialogCoroutine(string line)
     {
         dialogText.text = "";
         for (int i = 0; i < line.Length; i++)
@@ -231,6 +138,111 @@ public class GetNextHappening : MonoBehaviour
 
 
 
+    // ANCHOR ReadHappeningScripts
+    /// <summary>
+    /// 읽을 이벤트 파일 이름을 받아서 해당 대화 스크립트를 읽고,
+    /// txtScripts의 리스트 스트링 변수에 저장한다.
+    /// 
+    /// 만약 파일을 읽다가 BRANCH라는 명령어가 있으면
+    /// 질문지에 적힐 텍스트
+    /// 선택지 개수
+    /// 선택지에 적힐 텍스트 * 선택지 개수
+    /// 선택지 선택 후 이동할 텍스트파일명 * 선택지 개수
+    /// 를 읽어 각각
+    /// ChoiceSystem/Choice.cs의 string question
+    /// GetNextHappening.cs의 count
+    /// ChoiceSystem/Choice.cs의 List[string] answerList
+    /// GetNextHappening.cs의 branchFilePath
+    /// 에 저장한다.
+    /// </summary>
+    /// <param name="happening">
+    /// GetNext, BranchWaitCoroutine 함수로부터 받은 이벤트 대화 파일 이름
+    /// </param>
+    private void ReadHappeningScripts(string filePath)
+    {
+        // 아래 주석 없애면 선택지 부분 넘어가면 선택지 이전 대화를 볼 수 없음.
+        //txtScripts.Clear();
+        //txtScriptsIndex = 0;
+        try
+        {
+            StreamReader happeningsTxtScripts = new StreamReader(
+                new FileStream(filePath, FileMode.Open));
+            string line = "";
+            while (happeningsTxtScripts.EndOfStream != true)
+            {
+                line = happeningsTxtScripts.ReadLine();
+                // 주석 거르기
+                if (line.Length == 0) continue;
+                if (line.Length <= 2 || (line[0] == '/' && line[1] == '/')) continue;
+                if (line == "BRANCH")
+                {
+                    branchFlag = true;
+
+                    // 질문지 제목
+                    ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
+
+                    // 선택지 개수
+                    int count = int.Parse(happeningsTxtScripts.ReadLine());
+
+                    // 선택지 텍스트 채우기
+                    for (int i = 0; i < count; i++)
+                    {
+                        ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
+                    }
+
+                    // 분기 파일 이름 채우기
+                    for (int i = 0; i < count; i++)
+                    {
+                        branchFilePath[i] = happeningsTxtScripts.ReadLine();
+                    }
+                }
+                else
+                {
+                    txtScripts.Add(line);
+                    branchFlag = false;
+                }
+            }
+            happeningsTxtScripts.Close();
+        }
+        catch(FileNotFoundException e){
+            Debug.Log(e);
+            txtScripts.Add("해당 대화 스크립트가 존재하지 않습니다.");
+        }
+        catch(DirectoryNotFoundException e){
+            Debug.Log(e);
+            txtScripts.Add("해당 대화 스크립트 폴더가 존재하지 않습니다.");
+        }
+        catch(IOException e){
+            Debug.Log(e);
+            txtScripts.Add("대화 스크립트 형식이 잘못되었습니다.");
+        }
+        choiceIng = false;
+    }
+
+
+    // ANCHOR BranchWaitCoroutine
+    /// <summary>
+    /// 대화 파일을 읽었을 때 BRANCH라는 선택지 플래그가 있을 때,
+    /// branchFlag가 true가 되고, 대화를 끝까지 읽은 후 선택지 창이 나올 때
+    /// 실행되어 ChoiceManager에서 선택지 선택을 완료할 때 까지 기다리고
+    /// 각 선택지에 맞는 선택 후 대화 파일을 읽어 출력할 수 있도록
+    /// MakeFilePath에 파일 이름을 전달한다.
+    /// </summary>
+    /// <returns>ChoiceManager에서 선택을 완료할 때 까지 기다리기</returns>
+    private IEnumerator BranchWaitCoroutine()
+    {
+        choiceIng = true;
+        ChoiceManager.instance.ShowChoice();
+        yield return new WaitUntil(() => !ChoiceManager.instance.choiceIng);
+        ReadHappeningScripts(
+            MakeFilePath(branchFilePath[ChoiceManager.instance.GetResult()])
+        );
+        yield return new WaitUntil(() => !choiceIng);
+        if(fastNextDialogPrint){
+            PrintNextScripts();
+        }
+    }
+
     // ANCHOR MakeFilePath
     /// <summary>
     /// 대화 스크립트가 있는 파일 경로를 만드는 함수
@@ -241,9 +253,52 @@ public class GetNextHappening : MonoBehaviour
     /// </summary>
     /// <param name="key">대화 파일 이름</param>
     /// <returns>대화 파일 경로</returns>
-    public string MakeFilePath(string key)
+    private string MakeFilePath(string key)
     {
         string[] tmp = key.Split('_');
         return (defaultFolderPath + '/' + tmp[0] + '/' + key + ".txt");
+    }
+
+
+
+    // ANCHOR InitFunctions
+    public void Init_txtScripts(List<string> data){
+        txtScripts.Clear();
+        foreach(var line in data){
+            txtScripts.Add(line);
+        }
+    }
+    public void Init_branchFlag(bool data){
+        branchFlag = data;
+    }
+    public void Init_question(string data){
+        ChoiceManager.instance.Set_question(data);
+    }
+    public void Init_answerList(List<string> data){
+        foreach(var line in data){
+            ChoiceManager.instance.Add_answerList(line);
+        }
+    }
+    public void Init_branchFilePath(List<string> data){
+        for(int i=0;i<5;i++){
+            branchFilePath[i] = data[i];
+        }
+    }
+
+    // ANCHOR SaveFunctions
+    public List<string> Get_txtScripts(){
+        return txtScripts;
+    }
+    public bool Get_branchFlag(){
+        return branchFlag;
+    }
+    public string Get_question(){
+        return ChoiceManager.instance.Get_question();
+    }
+    public List<string> Get_answerList(){
+        return ChoiceManager.instance.Get_answerList();
+    }
+    public List<string> Get_branchFilePath(){
+        return branchFilePath;
     }
 }

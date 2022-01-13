@@ -64,7 +64,7 @@ public class ChoiceManager : MonoBehaviour
         questionText.text = "";
     }
     
-    // ANCHOR Utils
+    // ANCHOR Utils (Set_question, Add_answerList, GetResult, SetResult)
     /// <summary>
     /// 데이터 초기화 관련 함수들
     /// Scripts/HappeningOccur/GetNextHappening.cs에서 호출해서
@@ -73,8 +73,14 @@ public class ChoiceManager : MonoBehaviour
     public void Set_question(string line){
         question = line;
     }
+    public string Get_question(){
+        return question;
+    }
     public void Add_answerList(string line){
         answerList.Add(line);
+    }
+    public List<string> Get_answerList(){
+        return answerList;
     }
     public int GetResult(){
         return result;
