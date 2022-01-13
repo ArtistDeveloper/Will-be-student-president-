@@ -62,6 +62,80 @@ public class GetNextHappening : MonoBehaviour
     }
 
 
+    // ANCHOR PrintNextScripts
+    /// <summary>
+    /// 다음 대화를 출력
+    /// </summary>
+    public void PrintNextScripts()
+    {
+        if (txtScripts == null) return;
+        if (choiceIng) return; // 선택하고 있을 때는 대화를 못움직이게
+        if (txtScriptsIndex < txtScripts.Count)
+        {
+            Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
+            StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
+            txtScriptsIndex++;
+            nextDayFlag = false;
+        }
+        else
+        {
+            // 선택지가 있으면
+            if (branchFlag)
+            {
+                // 분기플래그를 끄고
+                branchFlag = false;
+                // 선택지 선택까지 기다린 후 선택지에 맞는 대화파일을 출력하는 코루틴을 호출
+                StartCoroutine(BranchWaitCoroutine()); 
+            }
+            else
+            {
+                // 대화를 끝까지 읽은 후 선택지가 없을 때,
+                // 다음 대화를 2번 누르면 다음날로 넘어갈 수 있는 기능
+                if (nextDayFlag)
+                {
+                    GetNext();
+                    nextDayFlag = false;
+                }
+                else
+                {
+                    Debug.Log("다음날로 넘어가려면 한번 더 누르세요.");
+                    nextDayFlag = true;
+                }
+                nextDayWarning.SetActive(nextDayFlag);
+            }
+        }
+    }
+
+
+    // ANCHOR PrintBackScripts
+    /// <summary>
+    /// 이전 대화를 출력
+    /// </summary>
+    public void PrintBackScripts()
+    {
+        if (txtScripts == null) return;
+        if (choiceIng) return; // 선택하고 있을 때는 대화를 못움직이게
+        if (0 <= txtScriptsIndex - 2)
+        {
+            txtScriptsIndex -= 2;
+            Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
+            StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
+            txtScriptsIndex++;
+        }
+        nextDayFlag = false;
+        nextDayWarning.SetActive(nextDayFlag);
+    }
+    
+    private IEnumerator TypingDialogCoroutine(string line)
+    {
+        dialogText.text = "";
+        for (int i = 0; i < line.Length; i++)
+        {
+            dialogText.text += line[i];
+            yield return waitTime;
+        }
+    }
+
 
 
     // ANCHOR ReadHappeningScripts
@@ -84,7 +158,7 @@ public class GetNextHappening : MonoBehaviour
     /// <param name="happening">
     /// GetNext, BranchWaitCoroutine 함수로부터 받은 이벤트 대화 파일 이름
     /// </param>
-    public void ReadHappeningScripts(string filePath)
+    private void ReadHappeningScripts(string filePath)
     {
         // 아래 주석 없애면 선택지 부분 넘어가면 선택지 이전 대화를 볼 수 없음.
         //txtScripts.Clear();
@@ -155,7 +229,7 @@ public class GetNextHappening : MonoBehaviour
     /// MakeFilePath에 파일 이름을 전달한다.
     /// </summary>
     /// <returns>ChoiceManager에서 선택을 완료할 때 까지 기다리기</returns>
-    IEnumerator BranchWaitCoroutine()
+    private IEnumerator BranchWaitCoroutine()
     {
         choiceIng = true;
         ChoiceManager.instance.ShowChoice();
@@ -169,83 +243,6 @@ public class GetNextHappening : MonoBehaviour
         }
     }
 
-
-    // ANCHOR PrintNextScripts
-    /// <summary>
-    /// 다음 대화를 출력
-    /// </summary>
-    
-    public void PrintNextScripts()
-    {
-        if (txtScripts == null) return;
-        if (choiceIng) return; // 선택하고 있을 때는 대화를 못움직이게
-        if (txtScriptsIndex < txtScripts.Count)
-        {
-            Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
-            StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
-            txtScriptsIndex++;
-            nextDayFlag = false;
-        }
-        else
-        {
-            // 선택지가 있으면
-            if (branchFlag)
-            {
-                // 분기플래그를 끄고
-                branchFlag = false;
-                // 선택지 선택까지 기다린 후 선택지에 맞는 대화파일을 출력하는 코루틴을 호출
-                StartCoroutine(BranchWaitCoroutine()); 
-            }
-            else
-            {
-                // 대화를 끝까지 읽은 후 선택지가 없을 때,
-                // 다음 대화를 2번 누르면 다음날로 넘어갈 수 있는 기능
-                if (nextDayFlag)
-                {
-                    GetNext();
-                    nextDayFlag = false;
-                }
-                else
-                {
-                    Debug.Log("다음날로 넘어가려면 한번 더 누르세요.");
-                    nextDayFlag = true;
-                }
-                nextDayWarning.SetActive(nextDayFlag);
-            }
-        }
-    }
-
-    // ANCHOR PrintBackScripts
-    /// <summary>
-    /// 이전 대화를 출력
-    /// </summary>
-    public void PrintBackScripts()
-    {
-        if (txtScripts == null) return;
-        if (choiceIng) return; // 선택하고 있을 때는 대화를 못움직이게
-        if (0 <= txtScriptsIndex - 2)
-        {
-            txtScriptsIndex -= 2;
-            Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
-            StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
-            txtScriptsIndex++;
-        }
-        nextDayFlag = false;
-        nextDayWarning.SetActive(nextDayFlag);
-    }
-    
-    IEnumerator TypingDialogCoroutine(string line)
-    {
-        dialogText.text = "";
-        for (int i = 0; i < line.Length; i++)
-        {
-            dialogText.text += line[i];
-            yield return waitTime;
-        }
-    }
-
-
-
     // ANCHOR MakeFilePath
     /// <summary>
     /// 대화 스크립트가 있는 파일 경로를 만드는 함수
@@ -256,9 +253,52 @@ public class GetNextHappening : MonoBehaviour
     /// </summary>
     /// <param name="key">대화 파일 이름</param>
     /// <returns>대화 파일 경로</returns>
-    public string MakeFilePath(string key)
+    private string MakeFilePath(string key)
     {
         string[] tmp = key.Split('_');
         return (defaultFolderPath + '/' + tmp[0] + '/' + key + ".txt");
+    }
+
+
+
+    // ANCHOR InitFunctions
+    public void Init_txtScripts(List<string> data){
+        txtScripts.Clear();
+        foreach(var line in data){
+            txtScripts.Add(line);
+        }
+    }
+    public void Init_branchFlag(bool data){
+        branchFlag = data;
+    }
+    public void Init_question(string data){
+        ChoiceManager.instance.Set_question(data);
+    }
+    public void Init_answerList(List<string> data){
+        foreach(var line in data){
+            ChoiceManager.instance.Add_answerList(line);
+        }
+    }
+    public void Init_branchFilePath(List<string> data){
+        for(int i=0;i<5;i++){
+            branchFilePath[i] = data[i];
+        }
+    }
+
+    // ANCHOR SaveFunctions
+    public List<string> Get_txtScripts(){
+        return txtScripts;
+    }
+    public bool Get_branchFlag(){
+        return branchFlag;
+    }
+    public string Get_question(){
+        return ChoiceManager.instance.Get_question();
+    }
+    public List<string> Get_answerList(){
+        return ChoiceManager.instance.Get_answerList();
+    }
+    public List<string> Get_branchFilePath(){
+        return branchFilePath;
     }
 }
