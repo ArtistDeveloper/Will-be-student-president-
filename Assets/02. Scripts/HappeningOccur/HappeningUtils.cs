@@ -5,16 +5,17 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HappeningUtils : MonoBehaviour
 {
     // MainScreen->HappeningUtils에 할당
-    
+
     // ANCHOR Top
     // 싱글톤 패턴
     public static HappeningUtils instance;
     public string happeningDataFilePath; // HappeningData.txt 파일 경로 저장 변수
-    
+
 
 
     // happening 데이터
@@ -66,7 +67,7 @@ public class HappeningUtils : MonoBehaviour
 
 
 
-    
+
 
     private void Awake()
     {
@@ -81,6 +82,10 @@ public class HappeningUtils : MonoBehaviour
         {
             Debug.Log("Util Class alread exists!");
             Destroy(this.gameObject);
+
+            GameObject startButtonGo = GameObject.Find("MainScreenCanvas").transform.Find("StartButton").gameObject;
+            Button startBtn = startButtonGo.GetComponent<Button>();
+            startBtn.onClick.AddListener(instance.MakeNewProgress);
         }
     }
 
@@ -91,20 +96,21 @@ public class HappeningUtils : MonoBehaviour
     /// 맨 처음에 단 한번만 실행됨
     /// 게임에 필요한 여러 세팅들을 초기화하는 함수
     /// </summary>
-    private void InitSettings(){
+    private void InitSettings()
+    {
         startDate_ = StringToInt(startDate);
         endDate_ = StringToInt(endDate);
         random = new System.Random();
         dateNow = startDate_;
 
-        
+
         typeIdList = new List<Tuple<int, int>>();
         happeningTitles = new Dictionary<int, string>();
         happeningOccurType = new Dictionary<int, Tuple<int, int, int>>();
         happeningOccurCntConst = new Dictionary<int, int>();
         happeningOccurRange = new Dictionary<int, List<Tuple<int, int>>>();
-        
-        
+
+
         etcHappeningsIdx = new List<int>();
         waitingHappeningsIdx = new List<int>();
         examLinkedHappeningsIdx = new List<int>();
@@ -309,7 +315,7 @@ public class HappeningUtils : MonoBehaviour
     }
 
 
- 
+
 
 
 
@@ -320,10 +326,12 @@ public class HappeningUtils : MonoBehaviour
     /// 현재 presentHappeningIdx를 반환함
     /// </summary>
     /// <returns></returns>
-    public int GetPresentHappeningIdx(){
+    public int GetPresentHappeningIdx()
+    {
         return presentHappeningIdx;
     }
-    public void SetPresentHappeningIdx(int savedPresentHappeningIdx){
+    public void SetPresentHappeningIdx(int savedPresentHappeningIdx)
+    {
         presentHappeningIdx = savedPresentHappeningIdx;
     }
 
@@ -336,12 +344,12 @@ public class HappeningUtils : MonoBehaviour
     /// <returns>
     /// 리스트[튜플[발생일,이벤트키]]
     /// </returns>
-    public List<Tuple<int,int>> GetHappeningStream()
+    public List<Tuple<int, int>> GetHappeningStream()
     {
         return new List<Tuple<int, int>>(happeningStream);
     }
 
-    public void SetHappeningStream(List<Tuple<int, int>>  savedHappeningStream)
+    public void SetHappeningStream(List<Tuple<int, int>> savedHappeningStream)
     {
         happeningStream = savedHappeningStream;
     }
@@ -351,7 +359,8 @@ public class HappeningUtils : MonoBehaviour
     /// presentHappeningIdx의 값을 바꿈
     /// </summary>
     /// <param name="change">바꿀 값. 기본 1</param>
-    public void IncreaseHappeningIdx(int change = 1){
+    public void IncreaseHappeningIdx(int change = 1)
+    {
         presentHappeningIdx += change;
     }
 
@@ -372,14 +381,16 @@ public class HappeningUtils : MonoBehaviour
         }
         return happeningStream[presentHappeningIdx++];
     }
-    public Tuple<int,int> GetPresentHappening__(){
+    public Tuple<int, int> GetPresentHappening__()
+    {
         if (happeningStream.Count <= presentHappeningIdx)
         {
             return new Tuple<int, int>(-1, -1);
         }
         return happeningStream[presentHappeningIdx];
     }
-    public void IncreasePresentHappeningIdx(int increase = 1){
+    public void IncreasePresentHappeningIdx(int increase = 1)
+    {
         presentHappeningIdx += increase;
     }
 
@@ -400,8 +411,8 @@ public class HappeningUtils : MonoBehaviour
         {
             /*Debug.Log(happeningTitles[hpng.Item2] + " " + hpng.Item1.ToString() + " " +
              IntToDateString(hpng.Item1) + " " + (dayOfTheWeek)DateType(hpng.Item1));*/
-             Debug.Log(IntToDateString(hpng.Item1) + " | 요일 : " + (dayOfTheWeek)DateType(hpng.Item1));
-             Debug.Log(happeningTitles[hpng.Item2]);
+            Debug.Log(IntToDateString(hpng.Item1) + " | 요일 : " + (dayOfTheWeek)DateType(hpng.Item1));
+            Debug.Log(happeningTitles[hpng.Item2]);
         }
     }
 

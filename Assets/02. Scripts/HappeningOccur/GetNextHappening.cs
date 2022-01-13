@@ -24,17 +24,18 @@ public class GetNextHappening : MonoBehaviour
     bool choiceIng, branchFlag;
 
     bool nextDayFlag = false;
-    
+
     public Text dialogText; // 게임 화면 맨 아래 텍스트 창
     private WaitForSeconds waitTime = new WaitForSeconds(0.01f);
 
     public GameObject nextDayWarning;
 
-    
 
-    private void Start() {
+
+    private void Start()
+    {
         txtScripts = new List<string>();
-        branchFilePath = new List<string>(){"","","","",""};
+        branchFilePath = new List<string>() { "", "", "", "", "" };
         choiceIng = false;
         branchFlag = false;
     }
@@ -46,7 +47,7 @@ public class GetNextHappening : MonoBehaviour
     /// </summary>
     public void GetNext()
     {
-        if(choiceIng)return;
+        if (choiceIng) return;
         txtScripts.Clear(); // 대화 로그 초기화
         txtScriptsIndex = 0; // 대화 로그 번호 초기화
         branchFlag = false;
@@ -57,7 +58,8 @@ public class GetNextHappening : MonoBehaviour
         ReadHappeningScripts(
             MakeFilePath(HappeningUtils.instance.GetPresentHappening__().Item2.ToString())
         );
-        if(fastNextDialogPrint){
+        if (fastNextDialogPrint)
+        {
             PrintNextScripts();
         }
 
@@ -88,7 +90,7 @@ public class GetNextHappening : MonoBehaviour
                 // 분기플래그를 끄고
                 branchFlag = false;
                 // 선택지 선택까지 기다린 후 선택지에 맞는 대화파일을 출력하는 코루틴을 호출
-                StartCoroutine(BranchWaitCoroutine()); 
+                StartCoroutine(BranchWaitCoroutine());
             }
             else
             {
@@ -128,7 +130,7 @@ public class GetNextHappening : MonoBehaviour
         nextDayFlag = false;
         nextDayWarning.SetActive(nextDayFlag);
     }
-    
+
     private IEnumerator TypingDialogCoroutine(string line)
     {
         dialogText.text = "";
@@ -207,15 +209,18 @@ public class GetNextHappening : MonoBehaviour
             }
             happeningsTxtScripts.Close();
         }
-        catch(FileNotFoundException e){
+        catch (FileNotFoundException e)
+        {
             Debug.Log(e);
             txtScripts.Add("해당 대화 스크립트가 존재하지 않습니다.");
         }
-        catch(DirectoryNotFoundException e){
+        catch (DirectoryNotFoundException e)
+        {
             Debug.Log(e);
             txtScripts.Add("해당 대화 스크립트 폴더가 존재하지 않습니다.");
         }
-        catch(IOException e){
+        catch (IOException e)
+        {
             Debug.Log(e);
             txtScripts.Add("대화 스크립트 형식이 잘못되었습니다.");
         }
@@ -241,7 +246,8 @@ public class GetNextHappening : MonoBehaviour
             MakeFilePath(branchFilePath[ChoiceManager.instance.GetResult()])
         );
         yield return new WaitUntil(() => !choiceIng);
-        if(fastNextDialogPrint){
+        if (fastNextDialogPrint)
+        {
             PrintNextScripts();
         }
     }
@@ -265,44 +271,57 @@ public class GetNextHappening : MonoBehaviour
 
 
     // ANCHOR InitFunctions
-    public void Set_txtScripts(List<string> data){
+    public void Set_txtScripts(List<string> data)
+    {
         txtScripts.Clear();
-        foreach(var line in data){
+        foreach (var line in data)
+        {
             txtScripts.Add(line);
         }
     }
-    public void Set_branchFlag(bool data){
+    public void Set_branchFlag(bool data)
+    {
         branchFlag = data;
     }
-    public void Set_question(string data){
+    public void Set_question(string data)
+    {
         ChoiceManager.instance.Set_question(data);
     }
-    public void Set_answerList(List<string> data){
+    public void Set_answerList(List<string> data)
+    {
         ChoiceManager.instance.Clear_answerList();
-        foreach(var line in data){
+        foreach (var line in data)
+        {
             ChoiceManager.instance.Add_answerList(line);
         }
     }
-    public void Set_branchFilePath(List<string> data){
-        for(int i=0;i<5;i++){
+    public void Set_branchFilePath(List<string> data)
+    {
+        for (int i = 0; i < 5; i++)
+        {
             branchFilePath[i] = data[i];
         }
     }
 
     // ANCHOR SaveFunctions
-    public List<string> Get_txtScripts(){
+    public List<string> Get_txtScripts()
+    {
         return txtScripts;
     }
-    public bool Get_branchFlag(){
+    public bool Get_branchFlag()
+    {
         return branchFlag;
     }
-    public string Get_question(){
+    public string Get_question()
+    {
         return ChoiceManager.instance.Get_question();
     }
-    public List<string> Get_answerList(){
+    public List<string> Get_answerList()
+    {
         return ChoiceManager.instance.Get_answerList();
     }
-    public List<string> Get_branchFilePath(){
+    public List<string> Get_branchFilePath()
+    {
         return branchFilePath;
     }
 }
