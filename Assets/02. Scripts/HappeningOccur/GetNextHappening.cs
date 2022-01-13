@@ -30,6 +30,8 @@ public class GetNextHappening : MonoBehaviour
 
     public GameObject nextDayWarning;
 
+    
+
     private void Start() {
         txtScripts = new List<string>();
         branchFilePath = new List<string>(){"","","","",""};
@@ -47,6 +49,7 @@ public class GetNextHappening : MonoBehaviour
         if(choiceIng)return;
         txtScripts.Clear(); // 대화 로그 초기화
         txtScriptsIndex = 0; // 대화 로그 번호 초기화
+        branchFlag = false;
 
         HappeningUtils.instance.DebugPrintHappening__(
             HappeningUtils.instance.GetPresentHappening__());
@@ -262,24 +265,25 @@ public class GetNextHappening : MonoBehaviour
 
 
     // ANCHOR InitFunctions
-    public void Init_txtScripts(List<string> data){
+    public void Set_txtScripts(List<string> data){
         txtScripts.Clear();
         foreach(var line in data){
             txtScripts.Add(line);
         }
     }
-    public void Init_branchFlag(bool data){
+    public void Set_branchFlag(bool data){
         branchFlag = data;
     }
-    public void Init_question(string data){
+    public void Set_question(string data){
         ChoiceManager.instance.Set_question(data);
     }
-    public void Init_answerList(List<string> data){
+    public void Set_answerList(List<string> data){
+        ChoiceManager.instance.Clear_answerList();
         foreach(var line in data){
             ChoiceManager.instance.Add_answerList(line);
         }
     }
-    public void Init_branchFilePath(List<string> data){
+    public void Set_branchFilePath(List<string> data){
         for(int i=0;i<5;i++){
             branchFilePath[i] = data[i];
         }
