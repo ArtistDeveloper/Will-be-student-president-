@@ -44,7 +44,7 @@ public class ChoiceManager : MonoBehaviour
     public Animator anim; // 창 열리고 닫히는 애니메이션 동작
 
     public bool choiceIng; // 선택지 대기, 다음 대화로 넘어가지 않게
-    //private bool keyInput; // 키처리 활성화, 비활성화, 키 입력이 없기때문에 제거하였음.
+    private bool clickAvailable; // 선택지 선택 활성화/비활성화, 선택지가 다 나오지 않았을 때 선택지 버튼을 클릭하는걸 막기 위해 사용
 
     private int count; // 배열의 크기
     private int result; // 선택지 선택 결과, 0~4
@@ -62,6 +62,7 @@ public class ChoiceManager : MonoBehaviour
             answerPanel[i].SetActive(false);
         }
         questionText.text = "";
+        clickAvailable = false;
     }
     
     // ANCHOR Utils (Set_question, Add_answerList, GetResult, SetResult)
@@ -113,6 +114,7 @@ public class ChoiceManager : MonoBehaviour
 
         anim.SetBool("Appear", true);
         //Selection(); // result 초기화에 따른 변경
+        clickAvailable = false;
         StartCoroutine(ChoiceCoroutine());
     }
 
@@ -175,8 +177,6 @@ public class ChoiceManager : MonoBehaviour
             StartCoroutine(TypingAnswer4());
         }
         yield return new WaitForSeconds(0.5f);
-
-        //keyInput = true;
     }
     // 코루틴 하나로 다돌리면 문제 생긴다고 함.
     // 그래서 여러개로 나누어서 한번에 실행?한다고 함
@@ -196,6 +196,7 @@ public class ChoiceManager : MonoBehaviour
             answerText[type].text += answerList[type][i];
             yield return waitTime;
         }
+        if(count == 0)clickAvailable = true;
     }
     IEnumerator TypingAnswer1(int type = 1)
     {
@@ -205,6 +206,7 @@ public class ChoiceManager : MonoBehaviour
             answerText[type].text += answerList[type][i];
             yield return waitTime;
         }
+        if(count == 1)clickAvailable = true;
     }
     IEnumerator TypingAnswer2(int type = 2)
     {
@@ -214,6 +216,7 @@ public class ChoiceManager : MonoBehaviour
             answerText[type].text += answerList[type][i];
             yield return waitTime;
         }
+        if(count == 2)clickAvailable = true;
     }
     IEnumerator TypingAnswer3(int type = 3)
     {
@@ -223,6 +226,7 @@ public class ChoiceManager : MonoBehaviour
             answerText[type].text += answerList[type][i];
             yield return waitTime;
         }
+        if(count == 3)clickAvailable = true;
     }
     IEnumerator TypingAnswer4(int type = 4)
     {
@@ -232,6 +236,7 @@ public class ChoiceManager : MonoBehaviour
             answerText[type].text += answerList[type][i];
             yield return waitTime;
         }
+        if(count == 4)clickAvailable = true;
     }
 
 
@@ -241,7 +246,7 @@ public class ChoiceManager : MonoBehaviour
     /// 지금은 버튼을 마우스를 통해 클릭하기 때문에 제거하였음.
     /// </summary>
     // private void Update() {
-    //     if(keyInput){
+    //     if(clickAvailable){
     //         if(Input.GetKeyDown(KeyCode.UpArrow)){
     //             if(result > 0)result--;
     //             else result = 0;
@@ -253,7 +258,7 @@ public class ChoiceManager : MonoBehaviour
     //             //Selection();
     //         }
     //         else if(Input.GetKeyDown(KeyCode.Z)){
-    //             keyInput = false;
+    //             clickAvailable = false;
     //             ExitChoice();
     //         }
     //     }
@@ -283,8 +288,9 @@ public class ChoiceManager : MonoBehaviour
     /// </summary>
     /// <param name="what">선택지 버튼 idx</param>
     public void CatchClick(int what){
+        if(!clickAvailable)return;
         result = what;
-        //keyInput = false;
+        clickAvailable = false;
         ExitChoice();
     }
 }
