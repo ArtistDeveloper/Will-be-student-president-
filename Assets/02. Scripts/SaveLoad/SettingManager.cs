@@ -17,7 +17,7 @@ public class SettingManager : MonoBehaviour
     // 불러오기 버튼 눌렀을 때 실행되는 함수
     public void OnClickedLoadBtn()
     {
-        SaveLoadManager.instance.LoadGameData();
+        SaveLoadManager.instance.OnClickLoadButton();
     }
 
 

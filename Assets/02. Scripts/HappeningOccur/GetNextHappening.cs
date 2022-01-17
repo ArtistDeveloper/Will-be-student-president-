@@ -11,6 +11,23 @@ public class GetNextHappening : MonoBehaviour
 {
     // GamePlayScene(ChoiWonYoung)->MainScreenCanvas->Debug->DebugButtonPanel->NextDay에 할당
 
+    public static GetNextHappening instance = null;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
 
     // true이면 다음날 누르자마자 첫번째 대화가 출력됨. false면 Next 눌러야 첫번째 대화가 출력됨.
     private bool fastNextDialogPrint = false;
@@ -20,24 +37,32 @@ public class GetNextHappening : MonoBehaviour
 
     private List<string> txtScripts; // 이벤트 대화들을 저장하는 리스트
     private int txtScriptsIndex; // 현재 몇번째 대화를 보고 있는지
-    private List<string> branchFilePath;
-    bool choiceIng, branchFlag;
-
-    bool nextDayFlag = false;
+    private List<string> branchFilePath; // 다음 대화로 연결되는 대화 스크립트 경로
+    bool choiceIng, branchFlag; // 선택지 창 켜져있는지, 대화 끝에 선택지가 있는지
+    
 
     public Text dialogText; // 게임 화면 맨 아래 텍스트 창
     private WaitForSeconds waitTime = new WaitForSeconds(0.01f);
 
-    public GameObject nextDayWarning;
+    public GameObject nextDayWarning; // 다음날로 넘어가려면 버튼 한번 더 안내 Panel
+    bool nextDayFlag = false; // true인 상태에서 다음대화 한번 더 누르면 다음날로 넘어가는 flag
 
 
-
-    private void Start()
-    {
+    private void Start() {
         txtScripts = new List<string>();
         branchFilePath = new List<string>() { "", "", "", "", "" };
         choiceIng = false;
         branchFlag = false;
+        txtScriptsIndex = 0;
+    }
+
+    // Start 버튼을 눌렀을 때 초기화
+    public void InitSettings()
+    {
+        txtScripts.Clear();
+        choiceIng = false;
+        branchFlag = false;
+        txtScriptsIndex = 0;
     }
 
 
@@ -275,6 +300,7 @@ public class GetNextHappening : MonoBehaviour
     // ANCHOR InitFunctions
     public void Set_txtScripts(List<string> data)
     {
+        txtScriptsIndex = 0;
         txtScripts.Clear();
         foreach (var line in data)
         {

@@ -13,10 +13,11 @@ public class HappeningUtils : MonoBehaviour
 
     // ANCHOR Top
     // 싱글톤 패턴
-    public static HappeningUtils instance;
-    public string happeningDataFilePath; // HappeningData.txt 파일 경로 저장 변수
+    public static HappeningUtils instance = null;
 
 
+    // HappeningData.txt 파일 경로 저장 변수
+    public string happeningDataFilePath; 
 
     // happening 데이터
     /// <summary>
@@ -82,10 +83,6 @@ public class HappeningUtils : MonoBehaviour
         {
             Debug.Log("Util Class alread exists!");
             Destroy(this.gameObject);
-
-            GameObject startButtonGo = GameObject.Find("MainScreenCanvas").transform.Find("StartButton").gameObject;
-            Button startBtn = startButtonGo.GetComponent<Button>();
-            startBtn.onClick.AddListener(instance.MakeNewProgress);
         }
     }
 
