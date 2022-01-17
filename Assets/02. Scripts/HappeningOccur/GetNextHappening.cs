@@ -191,6 +191,7 @@ public class GetNextHappening : MonoBehaviour
                     int count = int.Parse(happeningsTxtScripts.ReadLine());
 
                     // 선택지 텍스트 채우기
+                    ChoiceManager.instance.Clear_answerList(); // IndexOutOfRange 에러 해결 코드
                     for (int i = 0; i < count; i++)
                     {
                         ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
