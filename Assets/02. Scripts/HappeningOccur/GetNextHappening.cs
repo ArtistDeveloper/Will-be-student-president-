@@ -45,16 +45,13 @@ public class GetNextHappening : MonoBehaviour
     /// <summary>
     /// 다음 이벤트를 읽어옴.
     /// </summary>
-    public void z()
+    public void GetNext()
     {
         if (choiceIng) return;
         txtScripts.Clear(); // 대화 로그 초기화
         txtScriptsIndex = 0; // 대화 로그 번호 초기화
-<<<<<<< Updated upstream
         branchFlag = false;
-=======
-        branchFlag = true;
->>>>>>> Stashed changes
+
 
         HappeningUtils.instance.DebugPrintHappening__(
             HappeningUtils.instance.GetPresentHappening__());
