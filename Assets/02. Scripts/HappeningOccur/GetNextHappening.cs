@@ -204,7 +204,7 @@ public class GetNextHappening : MonoBehaviour
                 line = happeningsTxtScripts.ReadLine();
                 // 주석 거르기
                 if (line.Length == 0) continue;
-                if (line.Length <= 2 || (line[0] == '/' && line[1] == '/')) continue;
+                if (line.Length >= 2 && (line[0] == '/' && line[1] == '/')) continue;
                 if (line == "BRANCH")
                 {
                     branchFlag = true;
