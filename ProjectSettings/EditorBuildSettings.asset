@@ -4,5 +4,21 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/01. Scenes/SampleScene.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 0
+    path: Assets/01. Scenes/Test Scenes/MainScreen.unity
+    guid: 3811250f73eed2c45a468af4cfb11f7f
+  - enabled: 0
+    path: Assets/01. Scenes/Test Scenes/Ui(TextOutputTest).unity
+    guid: 69c789aab615ea049a7ae215d9dfda82
+  - enabled: 1
+    path: Assets/01. Scenes/Test Scenes/GamePlayScene(ChoiWonYoung).unity
+    guid: 5fc132de02955104ab78acf79494d735
+  - enabled: 1
+    path: Assets/01. Scenes/Test Scenes/SaveLoadTestScene.unity
+    guid: 74d8e940d4708384abc66174c275fd57
   m_Scenes: []
   m_configObjects: {}
