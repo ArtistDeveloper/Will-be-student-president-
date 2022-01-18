@@ -4,12 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class SaveLoadManager : MonoBehaviour
 {
     public static SaveLoadManager instance = null;
-    public GetNextHappening getNextHappening;
 
     List<Tuple<int,int>> savedHappeningStream;
     int savedPresentHappeningIdx;
@@ -41,8 +41,10 @@ public class SaveLoadManager : MonoBehaviour
         }
         else
         {
-            if(instance != this)
+            if (instance != this)
+            {
                 Destroy(this.gameObject);
+            }
         }
 
     }
@@ -52,7 +54,6 @@ public class SaveLoadManager : MonoBehaviour
     // 게임데이터 저장하는 함수
     public void SaveGameData()
     {
-        getNextHappening = GameObject.Find("NextDayButton").GetComponent<GetNextHappening>();
         BinaryFormatter bf = new BinaryFormatter();
         // To DO: 세이브버튼 여러번 누르면 파일이 여러 개 생성되는 지 확인
         // To Do: 파일 여러개에 사용자가 선택해서 넣을 수 있는 지 확인
@@ -63,11 +64,12 @@ public class SaveLoadManager : MonoBehaviour
 
         gameData.happeningStream = HappeningUtils.instance.GetHappeningStream();
         gameData.presentHappeningIdx = HappeningUtils.instance.GetPresentHappeningIdx();
-        gameData.txtScript = getNextHappening.Get_txtScripts();
-        gameData.branchFlag = getNextHappening.Get_branchFlag();
-        gameData.question = getNextHappening.Get_question();
-        gameData.answerList = getNextHappening.Get_answerList();
-        gameData.branchFilePath = getNextHappening.Get_branchFilePath();
+
+        gameData.txtScript = GetNextHappening.instance.Get_txtScripts();
+        gameData.branchFlag = GetNextHappening.instance.Get_branchFlag();
+        gameData.question = GetNextHappening.instance.Get_question();
+        gameData.answerList = GetNextHappening.instance.Get_answerList();
+        gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();
 
         Debug.Log("이거 저장한다");
         Debug.Log(HappeningUtils.instance.GetHappeningStream().Count);
@@ -77,12 +79,18 @@ public class SaveLoadManager : MonoBehaviour
         file.Close();
     }
 
+    // Start 버튼 눌렀을 때 onClick 함수
+    public void OnClickStartButton(){
+        HappeningUtils.instance.MakeNewProgress();
+        GetNextHappening.instance.InitSettings();
+    }
 
+
+    // Load 버튼 눌렀을 때 onClick 함수
     // 게임데이터 불러오는 함수
-     public void LoadGameData()
+    public void OnClickLoadButton()
     {
         try{
-            getNextHappening = GameObject.Find("NextDayButton").GetComponent<GetNextHappening>();
             BinaryFormatter bf = new BinaryFormatter();
             string path = Path.Combine(Application.persistentDataPath, "gameDataSave.dat");
             FileStream file = File.OpenRead(path);
@@ -95,11 +103,12 @@ public class SaveLoadManager : MonoBehaviour
                 // To Do: HappeningUtils로 넘기기
                 HappeningUtils.instance.SetHappeningStream(gameData.happeningStream);
                 HappeningUtils.instance.SetPresentHappeningIdx(gameData.presentHappeningIdx);
-                getNextHappening.Set_txtScripts(gameData.txtScript);
-                getNextHappening.Set_branchFlag(gameData.branchFlag);
-                getNextHappening.Set_question(gameData.question);
-                getNextHappening.Set_answerList(gameData.answerList);
-                getNextHappening.Set_branchFilePath(gameData.branchFilePath);
+
+                GetNextHappening.instance.Set_txtScripts(gameData.txtScript);
+                GetNextHappening.instance.Set_branchFlag(gameData.branchFlag);
+                GetNextHappening.instance.Set_question(gameData.question);
+                GetNextHappening.instance.Set_answerList(gameData.answerList);
+                GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);
 
                 Debug.Log("이거 불러왔다");
                 Debug.Log("HappeningUtils에 저장된거");
@@ -117,5 +126,4 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log(e.Message);
         }
     }
-
 }
