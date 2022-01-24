@@ -20,14 +20,13 @@ public class SaveLoadManager : MonoBehaviour
         public List<Tuple<int, int>> happeningStream;       // 해프닝 발생 순서
         public int presentHappeningIdx;                     // 현재 진행중인 해프닝 번호
         public List<string> txtScript;
-        public bool branchFlag;
-        public string question;
-        public List<string> answerList;
-        public List<string> branchFilePath;
+        public bool branchFlag;                             // 분기점
+        public string question;                             // 질문(선택지)
+        public List<string> answerList;                     // 선택 리스트
+        public List<string> branchFilePath;                 // 분기되는 파일 경로
 
+        public Tuple<int, int, int, int, int> status;       // 사용자의 스탯(인맥, 언변, 평판, 자금, 지지율)
         // 추가해야할 사항
-        // 사용자의 스탯정보
-        // 현재 지지자수(아직 애매)
         // 사용자가 본 대본번호(아직애매)
     }
 
@@ -71,6 +70,8 @@ public class SaveLoadManager : MonoBehaviour
         gameData.answerList = GetNextHappening.instance.Get_answerList();
         gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();
 
+        gameData.status = StatusManager.instance.SaveData();
+
         Debug.Log("이거 저장한다");
         Debug.Log(HappeningUtils.instance.GetHappeningStream().Count);
         Debug.Log(HappeningUtils.instance.GetPresentHappeningIdx());
@@ -109,6 +110,8 @@ public class SaveLoadManager : MonoBehaviour
                 GetNextHappening.instance.Set_question(gameData.question);
                 GetNextHappening.instance.Set_answerList(gameData.answerList);
                 GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);
+
+                // 스테이터스 로드하는 기능 추가해줘야함
 
                 Debug.Log("이거 불러왔다");
                 Debug.Log("HappeningUtils에 저장된거");
