@@ -161,19 +161,25 @@ public class ChoiceManager : MonoBehaviour
     IEnumerator ChoiceCoroutine()
     {
         yield return new WaitForSeconds(0.2f); // 창 열림/닫힘 애니메이션 지연시간
-
+        
+        questionText.text = "";
         StartCoroutine(TypingQuestion());
+        answerText[0].text = "";
         StartCoroutine(TypingAnswer0());
         if(count >= 1){
+            answerText[1].text = "";
             StartCoroutine(TypingAnswer1());
         }
         if(count >= 2){
+            answerText[2].text = "";
             StartCoroutine(TypingAnswer2());
         }
         if(count >= 3){
+            answerText[3].text = "";
             StartCoroutine(TypingAnswer3());
         }
         if(count >= 4){
+            answerText[4].text = "";
             StartCoroutine(TypingAnswer4());
         }
         yield return new WaitForSeconds(0.5f);
