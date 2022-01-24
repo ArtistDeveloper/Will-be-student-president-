@@ -1,3 +1,4 @@
+//#define STATUS
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,7 +40,10 @@ public class GetNextHappening : MonoBehaviour
     private int txtScriptsIndex; // 현재 몇번째 대화를 보고 있는지
     private List<string> branchFilePath; // 다음 대화로 연결되는 대화 스크립트 경로
     bool choiceIng, branchFlag; // 선택지 창 켜져있는지, 대화 끝에 선택지가 있는지
-    
+#if STATUS
+    private List<Tuple<int, int, int, int>> statusValue;
+#endif
+
 
     public Text dialogText; // 게임 화면 맨 아래 텍스트 창
     private WaitForSeconds waitTime = new WaitForSeconds(0.01f);
@@ -48,12 +52,20 @@ public class GetNextHappening : MonoBehaviour
     bool nextDayFlag = false; // true인 상태에서 다음대화 한번 더 누르면 다음날로 넘어가는 flag
 
 
-    private void Start() {
+    private void Start()
+    {
         txtScripts = new List<string>();
         branchFilePath = new List<string>() { "", "", "", "", "" };
         choiceIng = false;
         branchFlag = false;
         txtScriptsIndex = 0;
+#if STATUS
+        statusValue = new List<Tuple<int, int, int, int>>();
+        for (int i = 0; i < 5; i++)
+        {
+            statusValue.Add(new Tuple<int, int, int, int>(0, 0, 0, 0));
+        }
+#endif
     }
 
     // Start 버튼을 눌렀을 때 초기화
@@ -205,27 +217,50 @@ public class GetNextHappening : MonoBehaviour
                 // 주석 거르기
                 if (line.Length == 0) continue;
                 if (line.Length >= 2 && (line[0] == '/' && line[1] == '/')) continue;
-                if (line == "BRANCH")
+                if (line[0] == '@')
                 {
-                    branchFlag = true;
-
-                    // 질문지 제목
-                    ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
-
-                    // 선택지 개수
-                    int count = int.Parse(happeningsTxtScripts.ReadLine());
-
-                    // 선택지 텍스트 채우기
-                    ChoiceManager.instance.Clear_answerList(); // IndexOutOfRange 에러 해결 코드
-                    for (int i = 0; i < count; i++)
+                    if (line == "@SET_BRANCH_FLAG")
                     {
-                        ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
+                        branchFlag = true;
                     }
-
-                    // 분기 파일 이름 채우기
-                    for (int i = 0; i < count; i++)
+                    if (line == "@SET_QUESTION")
                     {
-                        branchFilePath[i] = happeningsTxtScripts.ReadLine();
+                        // 질문지 제목
+                        ChoiceManager.instance.Set_question(happeningsTxtScripts.ReadLine());
+                    }
+                    if (line == "@SET_ANSWER")
+                    {
+                        // 선택지 개수
+                        int count = int.Parse(happeningsTxtScripts.ReadLine());
+
+                        // 선택지 텍스트 채우기
+                        ChoiceManager.instance.Clear_answerList(); // IndexOutOfRange 에러 해결 코드
+                        for (int i = 0; i < count; i++)
+                        {
+                            ChoiceManager.instance.Add_answerList(happeningsTxtScripts.ReadLine());
+                        }
+
+                        // 분기 파일 이름 채우기
+                        for (int i = 0; i < count; i++)
+                        {
+                            branchFilePath[i] = happeningsTxtScripts.ReadLine();
+                        }
+                    }
+                    if (line == "@SET_STATUS")
+                    {
+                        int count = int.Parse(happeningsTxtScripts.ReadLine());
+#if STATUS
+                        for (int i = 0; i < count; i++)
+                        {
+                            line = happeningsTxtScripts.ReadLine();
+                            string[] tmp = line.Split(' ');
+                            statusValue[i] = new Tuple<int, int, int, int>(Int32.Parse(tmp[0]), Int32.Parse(tmp[1]), Int32.Parse(tmp[2]), Int32.Parse(tmp[3]));
+                        }
+#else
+                        for(int i=0;i<count;i++){
+                           line = happeningsTxtScripts.ReadLine();
+                        }
+#endif
                     }
                 }
                 else
@@ -269,6 +304,14 @@ public class GetNextHappening : MonoBehaviour
         choiceIng = true;
         ChoiceManager.instance.ShowChoice();
         yield return new WaitUntil(() => !ChoiceManager.instance.choiceIng);
+#if STATUS
+        Tuple<int, int, int, int> tmp = statusValue[ChoiceManager.instance.GetResult()];
+        StatusManager.instance.ChangeStatus(tmp.Item1, tmp.Item2, tmp.Item3, tmp.Item4);
+        for (int i = 0; i < statusValue.Count(); i++)
+        {
+            statusValue[i] = new Tuple<int, int, int, int>(0, 0, 0, 0);
+        }
+#endif
         ReadHappeningScripts(
             MakeFilePath(branchFilePath[ChoiceManager.instance.GetResult()])
         );
@@ -330,6 +373,12 @@ public class GetNextHappening : MonoBehaviour
             branchFilePath[i] = data[i];
         }
     }
+#if STATUS
+    public void Set_statusValue(List<Tuple<int, int, int, int>> data)
+    {
+        statusValue = data;
+    }
+#endif
 
     // ANCHOR SaveFunctions
     public List<string> Get_txtScripts()
@@ -352,4 +401,10 @@ public class GetNextHappening : MonoBehaviour
     {
         return branchFilePath;
     }
+#if STATUS
+    public List<Tuple<int, int, int, int>> Get_statusValue()
+    {
+        return statusValue;
+    }
+#endif
 }

@@ -4,10 +4,19 @@ asdfsdafsadf
 asdfas
 
 // 아래서부터는 줄바꿈, 빈 라인, 주석을 작성하면 안됩니다.
-BRANCH
+@SET_BRANCH_FLAG
+
+@SET_QUESTION
 2번째 분기 테스트
+
+@SET_ANSWER
 2
 1번 선택지
 2번 선택지
 114_4_1
 114_4_2
+
+@SET_STATUS
+2
+5 5 0 0
+50 50 50 50

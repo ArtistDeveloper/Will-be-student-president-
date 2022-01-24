@@ -123,6 +123,60 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &142942537
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 142942539}
+  - component: {fileID: 142942538}
+  m_Layer: 0
+  m_Name: StatusManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &142942538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142942537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b09a1508bfea7f24f9be0b921f91ee3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MAX_STATUS: 50
+  MAX_APPROVAL_RATING: 500
+  networkingContribution: 26
+  eloquenceContribution: 28
+  reputationContribution: 31
+  moneyContribution: 15
+  networkingText: {fileID: 0}
+  eloquenceText: {fileID: 0}
+  reputationText: {fileID: 0}
+  moneyText: {fileID: 0}
+  approvalRatingText: {fileID: 0}
+--- !u!4 &142942539
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142942537}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 412.6137, y: 783.00745, z: -209.7716}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &243828136
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,7 +901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077c5384acb1fc54faf9c7b62925303e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetScene: GamePlayScene(SaveLoad)
+  targetScene: GamePlayScene(Status)
 --- !u!1 &1602462619
 GameObject:
   m_ObjectHideFlags: 0
