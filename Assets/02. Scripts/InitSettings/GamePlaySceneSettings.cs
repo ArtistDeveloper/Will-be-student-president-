@@ -11,14 +11,12 @@ public class GamePlaySceneSettings : MonoBehaviour
     public Button scriptNextButton, scriptBackButton, saveButton;
     public GameObject nextDayWarningPanel;
     public GameObject message;
-#if STATUS
     // GamePlayScene(Status)의 MainScreenCanvas->StatusPanel의 텍스트들을 차례로 넣어주시면 됩니다.
     public Text networkingText;
     public Text eloquenceText;
     public Text reputationText;
     public Text moneyText;
     public Text approvalRatingText;
-#endif
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +34,7 @@ public class GamePlaySceneSettings : MonoBehaviour
         GetNextHappening.instance.dialogText = message.GetComponent<Text>();
 #if STATUS
         StatusManager.instance.SetTextComponent(networkingText, eloquenceText, reputationText, moneyText, approvalRatingText);
-        StatusManager.instance.SetStatus(5,5,5,5); // 이 코드는 SaveLoadManager.cs의 Start 버튼, Load 버튼 onclick 함수로 이동시켜야 합니다.
+        StatusManager.instance.ApplyStatusToText();
 #endif
     }
 }
