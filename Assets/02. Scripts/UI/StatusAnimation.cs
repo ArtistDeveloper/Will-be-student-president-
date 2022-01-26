@@ -6,32 +6,34 @@ using UnityEngine.UI;
 public class StatusAnimation : MonoBehaviour
 {
     public Image img;
-    public int stat;
+    [HideInInspector] public int stat;
 
     private const int statMax = 100;
 
-    private float startStatValue = 30f;
-    private float goalStatValue = 70f;
-
     private void Start()
     {
-        stat = 30;
-
         img.fillAmount = 0f;
         img.type = Image.Type.Filled;
         img.fillMethod = Image.FillMethod.Vertical;
         img.fillOrigin = (int)Image.OriginVertical.Bottom;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            StartCoroutine(TestAnim(30, goalStatValue));
-        }
-    }
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Tab))
+    //     {
+    //         StartCoroutine(PlayStatAnim(30f, 70f));
+    //     }
+    // }
 
-    private IEnumerator TestAnim(float startVal, float goalVal)
+
+    /// <summary>
+    /// 스탯의 애니메이션을 재생하는 함수입니다.
+    /// </summary>
+    /// <param name="startVal"></param> 값
+    /// <param name="goalVal"></param>
+    /// <returns></returns>
+    private IEnumerator PlayStatAnim(float startVal, float goalVal)
     {
         float changeVal = startVal;
         float elapsedTime = 0;
