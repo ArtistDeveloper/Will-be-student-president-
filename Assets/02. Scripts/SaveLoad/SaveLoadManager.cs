@@ -1,3 +1,4 @@
+// #define STATUS
 using System;
 using System.IO;
 using System.Collections;
@@ -25,7 +26,9 @@ public class SaveLoadManager : MonoBehaviour
         public List<string> answerList;                     // 선택 리스트
         public List<string> branchFilePath;                 // 분기되는 파일 경로
 
-        public Tuple<int, int, int, int, int> status;       // 사용자의 스탯(인맥, 언변, 평판, 자금, 지지율)
+        public Tuple<int, int, int, int> playerStatus;       // 사용자의 스탯(인맥, 언변, 평판, 자금)
+
+        public List<Tuple<int, int, int, int>> choiceStatus;   // 선택지의 스탯(인맥, 언변, 평판, 자금)
         // 추가해야할 사항
         // 사용자가 본 대본번호(아직애매)
     }
@@ -70,7 +73,10 @@ public class SaveLoadManager : MonoBehaviour
         gameData.answerList = GetNextHappening.instance.Get_answerList();
         gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();
 
-        gameData.status = StatusManager.instance.SaveData();
+        #if STATUS
+        gameData.playerStatus = StatusManager.instance.SaveStatus();
+        gameData.choiceStatus = GetNextHappening.instance.Get_statusValue();
+        #endif
 
         Debug.Log("이거 저장한다");
         Debug.Log(HappeningUtils.instance.GetHappeningStream().Count);
@@ -84,6 +90,9 @@ public class SaveLoadManager : MonoBehaviour
     public void OnClickStartButton(){
         HappeningUtils.instance.MakeNewProgress();
         GetNextHappening.instance.InitSettings();
+        #if STATUS
+        StatusManager.instance.SetStatusValue(5,5,5,5);
+        #endif
     }
 
 
@@ -110,6 +119,11 @@ public class SaveLoadManager : MonoBehaviour
                 GetNextHappening.instance.Set_question(gameData.question);
                 GetNextHappening.instance.Set_answerList(gameData.answerList);
                 GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);
+                
+                #if STATUS
+                StatusManager.instance.LoadStatus(gameData.playerStatus);
+                GetNextHappening.instance.Set_statusValue(gameData.choiceStatus);
+                #endif
 
                 // 스테이터스 로드하는 기능 추가해줘야함
 
