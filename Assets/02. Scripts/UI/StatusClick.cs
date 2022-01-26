@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class StatusClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public Image statusValueBackground;
+    public Image originImg;
 
     private bool isPressed;
+    private Coroutine statValueAnim;
 
     private void Start()
     {
@@ -34,19 +35,48 @@ public class StatusClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             if (isPressed)
             {
-                Debug.Log("눌러지고있어요");
+                if (statValueAnim == null)
+                {
+                    statValueAnim = StartCoroutine(ShowStatusValue());
+                }
+                else
+                {
+                    yield return null;
+                }
             }
             else
             {
-                Debug.Log("안눌러지고있어요");
-                // yield return null;
+                if (statValueAnim != null)
+                {
+                    StopCoroutine(statValueAnim);
+                    statValueAnim = null;
+
+                    // StartCoroutine(ShowStatusIcon());
+                }
             }
+
             yield return null;
         }
     }
 
-    public void ShowStatusValue()
+    private IEnumerator ShowStatusValue()
     {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
+        Color color = originImg.color;
 
+        while (originImg.color.a >= 0.0)
+        {
+            color.a -= 0.1f;
+            originImg.color = color;
+
+            yield return waitForSeconds;
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator ShowStatusIcon()
+    {
+        yield return null;
     }
 }
