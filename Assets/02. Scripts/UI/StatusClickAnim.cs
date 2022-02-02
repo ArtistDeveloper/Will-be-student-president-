@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Text statValue;
+    public UnityEvent statClickEvent;
+    public UnityEvent statClickCancleEvent;
 
-    private Image originImg;
-    private Color originImgColor;
+    private Image transparentImg;
+    private Color transparentImgColor;
     private bool isPressed;
     private Coroutine statValueAnim;
     private Coroutine statIconAnim;
@@ -18,8 +21,8 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     private void Start()
     {
-        originImg = GetComponent<Image>();
-        originImgColor = originImg.color;
+        transparentImg = GetComponent<Image>();
+        transparentImgColor = transparentImg.color;
         StartCoroutine(CoCheckClickEvent());
     }
 
@@ -27,11 +30,13 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public void OnPointerDown(PointerEventData eventData)
     {
         isPressed = true;
+        statClickEvent.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         isPressed = false;
+        statClickCancleEvent.Invoke();
     }
     // #endif
 
@@ -50,7 +55,7 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                         StopCoroutine(statIconAnim);
                         statIconAnim = null;
                     }
-                    statValueAnim = StartCoroutine(CoHideStatValueAnim());
+                    statValueAnim = StartCoroutine(CoHideStatIconAnim());
 
                     // Text애니메이션 재생
                     statValue.gameObject.SetActive(true);
@@ -76,14 +81,14 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     }
 
 
-    // ANCHOR : CoHideStatValueAnim()
+    // ANCHOR : CoHideStatIconAnim()
     /// <summary>
     /// 아이콘을 클릭했을 때 Status아이콘을 숨기는 애니메이션을 재생합니다.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator CoHideStatValueAnim()
+    private IEnumerator CoHideStatIconAnim()
     {
-        Color changeColor = originImgColor;
+        Color changeColor = transparentImgColor;
 
         // lerp값 조절용
         float elapsedTime = 0;
@@ -96,7 +101,7 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             elapsedTime += Time.unscaledDeltaTime;
             progress = progress - elapsedTime / animSpeed;
 
-            originImg.color = changeColor;
+            transparentImg.color = changeColor;
 
             yield return null;
         }
@@ -121,20 +126,20 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     /// <returns></returns>
     private IEnumerator CoShowStatIconAnim()
     {
-        Color changeColor = originImg.color;
+        Color changeColor = transparentImg.color;
 
         // lerp값 조절용
         float elapsedTime = 0;
         float progress = 0;
 
-        while (changeColor.a < originImgColor.a)
+        while (changeColor.a < transparentImgColor.a)
         {
-            changeColor.a = Mathf.Lerp(changeColor.a, originImgColor.a, progress);
+            changeColor.a = Mathf.Lerp(changeColor.a, transparentImgColor.a, progress);
 
             elapsedTime += Time.unscaledDeltaTime;
             progress = elapsedTime / animSpeed;
 
-            originImg.color = changeColor;
+            transparentImg.color = changeColor;
 
             yield return null;
         }
