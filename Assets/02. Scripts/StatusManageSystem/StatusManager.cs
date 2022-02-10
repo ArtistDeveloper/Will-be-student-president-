@@ -87,8 +87,20 @@ public class StatusManager : MonoBehaviour
 
         ApplyStatusToText();
     }
+    public void SetStatusValue(int networking, int eloquence, int reputation, int money)
+    {
+        this.networking = Math.Min(networking, MAX_STATUS);
+        this.eloquence = Math.Min(eloquence, MAX_STATUS);
+        this.reputation = Math.Min(reputation, MAX_STATUS);
+        this.money = Math.Min(money, MAX_STATUS);
+        // 지지율 계산
+        approvalRating = Math.Min((int)(
+            networking * networkingContribution + eloquence * eloquenceContribution + reputation * reputationContribution + money * moneyContribution),
+            MAX_APPROVAL_RATING
+        );
+    }
 
-    private void ApplyStatusToText()
+    public void ApplyStatusToText()
     {
         networkingText.text = this.networking.ToString();
         eloquenceText.text = this.eloquence.ToString();
@@ -115,6 +127,6 @@ public class StatusManager : MonoBehaviour
     /// 저장, 로드 스크립트로부터 받아옴
     /// </summary>
     public void LoadStatus(Tuple<int,int,int,int> data){
-        SetStatus(data.Item1,data.Item2,data.Item3,data.Item4);
+        SetStatusValue(data.Item1,data.Item2,data.Item3,data.Item4);
     }
 }
