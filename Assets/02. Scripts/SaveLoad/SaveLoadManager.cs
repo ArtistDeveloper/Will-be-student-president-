@@ -1,4 +1,5 @@
-// #define STATUS
+//#define SCENARIO_MASTER_TEST // 지워야 할 내용
+//#define STATUS // 지워야 할 내용
 using System;
 using System.IO;
 using System.Collections;
@@ -21,14 +22,21 @@ public class SaveLoadManager : MonoBehaviour
         public List<Tuple<int, int>> happeningStream;       // 해프닝 발생 순서
         public int presentHappeningIdx;                     // 현재 진행중인 해프닝 번호
         public List<string> txtScript;
-        public bool branchFlag;                             // 분기점
-        public string question;                             // 질문(선택지)
-        public List<string> answerList;                     // 선택 리스트
-        public List<string> branchFilePath;                 // 분기되는 파일 경로
+        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        public Queue<string> commandLines;
+        #else// 지워야 할 내용
+        public bool branchFlag;// 지워야 할 내용
+        public string question;// 지워야 할 내용
+        public List<string> answerList;// 지워야 할 내용
+        public List<string> branchFilePath;// 지워야 할 내용
+        #endif// 지워야 할 내용
 
         public Tuple<int, int, int, int> playerStatus;       // 사용자의 스탯(인맥, 언변, 평판, 자금)
 
-        public List<Tuple<int, int, int, int>> choiceStatus;   // 선택지의 스탯(인맥, 언변, 평판, 자금)
+        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        #else// 지워야 할 내용
+        public List<Tuple<int, int, int, int>> choiceStatus;   // 선택지의 스탯(인맥, 언변, 평판, 자금) // 지워야 할 내용
+        #endif// 지워야 할 내용
         // 추가해야할 사항
         // 사용자가 본 대본번호(아직애매)
     }
@@ -67,16 +75,24 @@ public class SaveLoadManager : MonoBehaviour
         gameData.happeningStream = HappeningUtils.instance.GetHappeningStream();
         gameData.presentHappeningIdx = HappeningUtils.instance.GetPresentHappeningIdx();
 
-        gameData.txtScript = GetNextHappening.instance.Get_txtScripts();
-        gameData.branchFlag = GetNextHappening.instance.Get_branchFlag();
-        gameData.question = GetNextHappening.instance.Get_question();
-        gameData.answerList = GetNextHappening.instance.Get_answerList();
-        gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();
+        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        gameData.txtScript = ScenarioMaster.instance.Get_txtScripts();
+        gameData.commandLines = ScenarioMaster.instance.Get_commandLines();
+        #else// 지워야 할 내용
+        gameData.txtScript = GetNextHappening.instance.Get_txtScripts();// 지워야 할 내용
+        gameData.branchFlag = GetNextHappening.instance.Get_branchFlag();// 지워야 할 내용
+        gameData.question = GetNextHappening.instance.Get_question();// 지워야 할 내용
+        gameData.answerList = GetNextHappening.instance.Get_answerList();// 지워야 할 내용
+        gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();// 지워야 할 내용
+        #endif// 지워야 할 내용
 
-        #if STATUS
+        #if STATUS// 지워야 할 내용
         gameData.playerStatus = StatusManager.instance.SaveStatus();
-        gameData.choiceStatus = GetNextHappening.instance.Get_statusValue();
-        #endif
+        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        #else// 지워야 할 내용
+        gameData.choiceStatus = GetNextHappening.instance.Get_statusValue();// 지워야 할 내용
+        #endif// 지워야 할 내용
+        #endif// 지워야 할 내용
 
         Debug.Log("이거 저장한다");
         Debug.Log(HappeningUtils.instance.GetHappeningStream().Count);
@@ -89,10 +105,14 @@ public class SaveLoadManager : MonoBehaviour
     // Start 버튼 눌렀을 때 onClick 함수
     public void OnClickStartButton(){
         HappeningUtils.instance.MakeNewProgress();
-        GetNextHappening.instance.InitSettings();
-        #if STATUS
-        StatusManager.instance.SetStatusValue(5,5,5,5);
-        #endif
+        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        ScenarioMaster.instance.InitSettings();
+        #else// 지워야 할 내용
+        GetNextHappening.instance.InitSettings();// 지워야 할 내용
+        #endif// 지워야 할 내용
+        #if STATUS// 지워야 할 내용
+        StatusManager.instance.SetStatusValue(5,5,5,5); // 스텟 초기값 설정
+        #endif// 지워야 할 내용
     }
 
 
@@ -114,18 +134,26 @@ public class SaveLoadManager : MonoBehaviour
                 HappeningUtils.instance.SetHappeningStream(gameData.happeningStream);
                 HappeningUtils.instance.SetPresentHappeningIdx(gameData.presentHappeningIdx);
 
-                GetNextHappening.instance.Set_txtScripts(gameData.txtScript);
-                GetNextHappening.instance.Set_branchFlag(gameData.branchFlag);
-                GetNextHappening.instance.Set_question(gameData.question);
-                GetNextHappening.instance.Set_answerList(gameData.answerList);
-                GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);
                 
-                #if STATUS
+                #if SCENARIO_MASTER_TEST// 지워야 할 내용
+                ScenarioMaster.instance.Set_txtScripts(gameData.txtScript);
+                ScenarioMaster.instance.Set_commandLines(gameData.commandLines);
+                #else// 지워야 할 내용
+                GetNextHappening.instance.Set_txtScripts(gameData.txtScript);// 지워야 할 내용
+                GetNextHappening.instance.Set_branchFlag(gameData.branchFlag);// 지워야 할 내용
+                GetNextHappening.instance.Set_question(gameData.question);// 지워야 할 내용
+                GetNextHappening.instance.Set_answerList(gameData.answerList);// 지워야 할 내용
+                GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);// 지워야 할 내용
+                #endif// 지워야 할 내용
+                
+                #if STATUS// 지워야 할 내용
                 StatusManager.instance.LoadStatus(gameData.playerStatus);
-                GetNextHappening.instance.Set_statusValue(gameData.choiceStatus);
-                #endif
+                #if SCENARIO_MASTER_TEST// 지워야 할 내용
+                #else// 지워야 할 내용
+                GetNextHappening.instance.Set_statusValue(gameData.choiceStatus);// 지워야 할 내용
+                #endif// 지워야 할 내용
+                #endif// 지워야 할 내용
 
-                // 스테이터스 로드하는 기능 추가해줘야함
 
                 Debug.Log("이거 불러왔다");
                 Debug.Log("HappeningUtils에 저장된거");

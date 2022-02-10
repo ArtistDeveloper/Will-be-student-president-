@@ -128,5 +128,6 @@ public class StatusManager : MonoBehaviour
     /// </summary>
     public void LoadStatus(Tuple<int,int,int,int> data){
         SetStatusValue(data.Item1,data.Item2,data.Item3,data.Item4);
+        ApplyStatusToText();
     }
 }
