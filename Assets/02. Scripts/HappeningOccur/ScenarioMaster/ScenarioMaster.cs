@@ -38,7 +38,7 @@ public class ScenarioMaster : MonoBehaviour
     private List<string> branchFilePath; // 다음 대화로 연결되는 대화 스크립트 경로
     bool choiceIng; // 선택지 창 켜져있는지
     private Queue<string> commandLines; // txt 명령어 라인들
-    private Queue<string> branchCache;
+    private Queue<string> branchCache, commandCache;
 
     private bool endText;
 
@@ -58,6 +58,7 @@ public class ScenarioMaster : MonoBehaviour
         choiceIng = false;
         txtScriptsIndex = 0;
         branchCache = new Queue<string>();
+        commandCache = new Queue<string>();
     }
 
     public void InitSettings()
@@ -68,6 +69,7 @@ public class ScenarioMaster : MonoBehaviour
         commandLines.Clear();
         endText = true;
         branchCache.Clear();
+        commandCache.Clear();
     }
 
 
@@ -201,6 +203,7 @@ public class ScenarioMaster : MonoBehaviour
                 if (cmdtype == commandType.text)
                 {
                     PrintScript();
+                    commandCache.Enqueue(command);
                     break;
                 }
                 else if (cmdtype == commandType.branch)
@@ -334,6 +337,10 @@ public class ScenarioMaster : MonoBehaviour
         }
     }
     public void Set_commandLines(Queue<string> data){
+        txtScriptsIndex = 0;
+        txtScripts.Clear();
+        branchCache.Clear();
+        commandCache.Clear();
         commandLines = data;
     }
 
@@ -343,10 +350,18 @@ public class ScenarioMaster : MonoBehaviour
         return txtScripts;
     }
     public Queue<string> Get_commandLines(){
-        foreach(var cmd in commandLines){
-            branchCache.Enqueue(cmd);
+        // 오류 수정
+        Queue<string> ret, tmp;
+        ret = new Queue<string>(commandCache);
+        tmp = new Queue<string>(branchCache);
+        foreach(var cmd in tmp){
+            ret.Enqueue(cmd);
         }
-        return branchCache;
+        tmp = new Queue<string>(commandLines);
+        foreach(var cmd in tmp){
+            ret.Enqueue(cmd);
+        }
+        return ret;
     }
     
 }
