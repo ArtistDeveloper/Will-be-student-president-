@@ -76,7 +76,7 @@ public class SaveLoadManager : MonoBehaviour
         gameData.presentHappeningIdx = HappeningUtils.instance.GetPresentHappeningIdx();
 
         #if SCENARIO_MASTER_TEST// 지워야 할 내용
-        gameData.txtScript = ScenarioMaster.instance.Get_txtScripts();
+        //gameData.txtScript = ScenarioMaster.instance.Get_txtScripts();
         gameData.commandLines = ScenarioMaster.instance.Get_commandLines();
         #else// 지워야 할 내용
         gameData.txtScript = GetNextHappening.instance.Get_txtScripts();// 지워야 할 내용
@@ -136,7 +136,7 @@ public class SaveLoadManager : MonoBehaviour
 
                 
                 #if SCENARIO_MASTER_TEST// 지워야 할 내용
-                ScenarioMaster.instance.Set_txtScripts(gameData.txtScript);
+                //ScenarioMaster.instance.Set_txtScripts(gameData.txtScript);
                 ScenarioMaster.instance.Set_commandLines(gameData.commandLines);
                 #else// 지워야 할 내용
                 GetNextHappening.instance.Set_txtScripts(gameData.txtScript);// 지워야 할 내용
