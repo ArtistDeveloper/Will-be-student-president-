@@ -60,6 +60,7 @@ public class StatusClickAnim : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                     // Text애니메이션 재생
                     statValue.gameObject.SetActive(true);
                     statTextAnim = StartCoroutine(CoShowTextAnim());
+                    
                 }
             }
             else
