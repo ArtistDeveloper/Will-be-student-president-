@@ -1,25 +1,18 @@
-A : 개학이다
-B : 벌써 집가고싶어
+// 일반 대사 명령어
+text A : asdf
+text B : asdf
 
-@SET_BRANCH_FLAG
+// 스테이터스 획득 명령어
+getstatus 10 11 12 13
 
-@SET_QUESTION
-질문지
-
-@SET_ANSWER
-4
-나도
-난 별로
-나도야
-난 개학해서 좋음
+// 선택지 명령어
+branch 2 question
+yes
+no
 114_1
 114_2
-114_3
-114_4
 
-@SET_STATUS
-4
-10 0 0 0
-0 10 0 0
-0 0 10 0
-30 40 60 10
+// 해당 이벤트 대화 종료 명령어 (선택지가 있다면 114.txt가 아니라 114_1, 114_2.txt 각각의 끝에 추가해야 합니다.)
+//endtext
+
+getstatus 10 10 10 10

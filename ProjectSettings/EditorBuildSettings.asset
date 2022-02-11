@@ -7,10 +7,10 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: 
-    guid: 2cda990e2423bbf4892e6590ba056729
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
-    guid: 3811250f73eed2c45a468af4cfb11f7f
+    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/01. Scenes/1_Test Scenes/Ui(TextOutputTest).unity
     guid: 69c789aab615ea049a7ae215d9dfda82
@@ -24,9 +24,9 @@ EditorBuildSettings:
     path: Assets/01. Scenes/2_BackupScenes/MainScreen(SaveLoad).unity
     guid: 3b17ac647a14a5d45bcfcd7fd153f7ee
   - enabled: 1
-    path: Assets/01. Scenes/1_Test Scenes/Status/MainScreen(Status).unity
-    guid: 8cfc8b91abf0d6340bdb95e03ab3b3e3
+    path: Assets/01. Scenes/1_Test Scenes/ScenarioMasterScene/MainScreen(ScenarioMaster).unity
+    guid: d49f262efc223434ebf355f6e7a15cb5
   - enabled: 1
-    path: Assets/01. Scenes/1_Test Scenes/Status/GamePlayScene(Status).unity
-    guid: 72934a6a8d88afc4b817dcd140d122a4
+    path: Assets/01. Scenes/1_Test Scenes/ScenarioMasterScene/GamePlayScene(ScenarioMaster).unity
+    guid: 4ad0f8629bb3c0a43a4a4f924ff13f3d
   m_configObjects: {}
