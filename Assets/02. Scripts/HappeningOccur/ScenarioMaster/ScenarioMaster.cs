@@ -29,7 +29,7 @@ public class ScenarioMaster : MonoBehaviour
 
     // ANCHOR top
     public string defaultFolderPath; // 이벤트 대화들을 저장하는 파일들의 기본 폴더 경로
-    public enum commandType { text, endtext, get_status, branch, error }; // 명령어 type
+    public enum commandType { text, endtext, get_status, branch, bg, error }; // 명령어 type
 
 
     // 저장해야 할 내용들
@@ -38,7 +38,7 @@ public class ScenarioMaster : MonoBehaviour
     private List<string> branchFilePath; // 다음 대화로 연결되는 대화 스크립트 경로
     bool choiceIng; // 선택지 창 켜져있는지
     private Queue<string> commandLines; // txt 명령어 라인들
-    private Queue<string> branchCache, commandCache;
+    private Queue<string> branchCache, commandCaches;
 
     private bool endText;
 
@@ -49,6 +49,8 @@ public class ScenarioMaster : MonoBehaviour
     public GameObject nextDayWarning; // 다음날로 넘어가려면 버튼 한번 더 안내 Panel
     bool nextDayFlag = false; // true인 상태에서 다음대화 한번 더 누르면 다음날로 넘어가는 flag
 
+    public bool settingFlag;
+
 
     private void Start()
     {
@@ -58,7 +60,9 @@ public class ScenarioMaster : MonoBehaviour
         choiceIng = false;
         txtScriptsIndex = 0;
         branchCache = new Queue<string>();
-        commandCache = new Queue<string>();
+        commandCaches = new Queue<string>();
+
+        settingFlag = false;
     }
 
     public void InitSettings()
@@ -69,17 +73,19 @@ public class ScenarioMaster : MonoBehaviour
         commandLines.Clear();
         endText = true;
         branchCache.Clear();
-        commandCache.Clear();
+        commandCaches.Clear();
+
+        ReadPresentHappening();
     }
 
 
 
 
-    // ANCHOR GetNext
+    // ANCHOR 현재 이벤트 로딩 - ReadPresentHappening
     /// <summary>
-    /// 다음 이벤트를 읽어옴.
+    /// 현재 이벤트 텍스트 파일 id.txt를 읽어옴
     /// </summary>
-    public void ReadNextHappening()
+    public void ReadPresentHappening()
     {
         if (choiceIng) return;
         txtScripts.Clear(); // 대화 로그 초기화
@@ -92,11 +98,15 @@ public class ScenarioMaster : MonoBehaviour
         ParseTextScript(
             MakeFilePath(HappeningUtils.instance.GetPresentHappening__().Item2.ToString())
         );
-        HappeningUtils.instance.IncreaseHappeningIdx(); // 이거를 다음날 넘어가는 직전에 증가시키는거로 변경해야될듯
     }
 
 
-
+    // ANCHOR 텍스트파일 줄단위 파싱 - ParseTextScript
+    /// <summary>
+    /// 주석, 빈 줄 등을 제거하여
+    /// commandLines에 명령어들을 저장하는 함수
+    /// </summary>
+    /// <param name="filePath"></param>
     private void ParseTextScript(string filePath)
     {
         try
@@ -132,6 +142,12 @@ public class ScenarioMaster : MonoBehaviour
     }
 
 
+    // ANCHOR 명령어 실행 함수 - ExecuteCommand
+    /// <summary>
+    /// 명령어 실행 함수
+    /// </summary>
+    /// <param name="command">Queue<string> commandLines의 front</param>
+    /// <returns>commandType(명령어 타입 enum)</returns>
     private commandType ExecuteCommand(string command)
     {
         string[] cmdtmp = command.Split(' ');
@@ -145,9 +161,11 @@ public class ScenarioMaster : MonoBehaviour
         {
             case "text":
                 txtScripts.Add(contents);
+                commandCaches.Enqueue(command);
                 return commandType.text;
             case "endtext":
                 endText = true;
+                commandCaches.Enqueue(command);
                 return commandType.endtext;
             case "getstatus":
                 cmdtmp = contents.Split(' ');
@@ -177,13 +195,17 @@ public class ScenarioMaster : MonoBehaviour
                 }
                 StartCoroutine(BranchWaitCoroutine());
                 return commandType.branch;
+            case "bg":
+                // 백그라운드클래스.instance.함수(cmdtmp[1]); // 주석해제, 클래스명, 함수명 바꾸기
+                commandCaches.Enqueue(command);
+                return commandType.bg;
             default:
                 return commandType.error;
         }
 
     }
 
-    // ANCHOR PrintNextScripts
+    // ANCHOR 다음 대화 버튼 - OnClickNextButton
     /// <summary>
     /// 다음 대화 버튼을 눌렀을 때
     /// 다음 대화를 출력
@@ -200,19 +222,13 @@ public class ScenarioMaster : MonoBehaviour
                 string command = commandLines.Dequeue();
                 commandType cmdtype = ExecuteCommand(command);
                 Debug.Log(cmdtype);
-                if (cmdtype == commandType.text)
+                if (cmdtype == commandType.text || cmdtype == commandType.endtext)
                 {
                     PrintScript();
-                    commandCache.Enqueue(command);
                     break;
                 }
                 else if (cmdtype == commandType.branch)
                 {
-                    break;
-                }
-                else if (cmdtype == commandType.endtext)
-                {
-                    PrintScript();
                     break;
                 }
                 else if(cmdtype == commandType.error)
@@ -231,7 +247,7 @@ public class ScenarioMaster : MonoBehaviour
         }
     }
 
-    // ANCHOR PrintBackScripts
+    // ANCHOR 이전 대화 버튼 - OnClickBackButton
     /// <summary>
     /// 이전 대화를 출력 
     /// </summary>
@@ -242,9 +258,23 @@ public class ScenarioMaster : MonoBehaviour
         PrintScript(true);
     }
 
-    public void PrintScript(bool backLog = false)
+
+    // ANCHOR 대화 출력 관리 함수 - PrintScript
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="backLog">이전대화를 출력</param>
+    /// <param name="present">현재 대화를 출력</param>
+    public void PrintScript(bool backLog = false, bool present = false)
     {
-        if (backLog == false)
+        if(present){
+            if (txtScriptsIndex > 0)
+            {
+                Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex - 1]);
+                StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex - 1]));
+            }
+        }
+        else if (backLog == false)
         {
             if (txtScriptsIndex < txtScripts.Count)
             {
@@ -259,7 +289,8 @@ public class ScenarioMaster : MonoBehaviour
                 // 다음 대화를 2번 누르면 다음날로 넘어갈 수 있는 기능
                 if (nextDayFlag)
                 {
-                    ReadNextHappening();
+                    HappeningUtils.instance.IncreaseHappeningIdx();
+                 ReadPresentHappening();
                     nextDayFlag = false;
                 }
                 else
@@ -326,42 +357,48 @@ public class ScenarioMaster : MonoBehaviour
     }
 
 
-    // ANCHOR InitFunctions
-    public void Set_txtScripts(List<string> data)
-    {
-        txtScriptsIndex = 0;
-        txtScripts.Clear();
-        foreach (var line in data)
-        {
-            txtScripts.Add(line);
-        }
-    }
+    // ANCHOR 로딩 관련 함수들
     public void Set_commandLines(Queue<string> data){
         txtScriptsIndex = 0;
         txtScripts.Clear();
         branchCache.Clear();
-        commandCache.Clear();
+        commandCaches.Clear();
         commandLines = data;
     }
-
-    // ANCHOR SaveFunctions
-    public List<string> Get_txtScripts()
+    public void Set_commandCachesCount(int data)
     {
-        return txtScripts;
+        for (int i = 0; i < data; i++)
+        {
+            ExecuteCommand(commandLines.Dequeue());
+        }
+        txtScriptsIndex = txtScripts.Count;
+        nextDayFlag = false;
+        PrintScript(present: true);
     }
+
+    // ANCHOR 저장 관련 함수들
     public Queue<string> Get_commandLines(){
         // 오류 수정
-        Queue<string> ret, tmp;
-        ret = new Queue<string>(commandCache);
+        Queue<string> ret = new Queue<string>(), tmp;
+
+        tmp = new Queue<string>(commandCaches);
+        foreach(var cmd in tmp){
+            ret.Enqueue(cmd);
+        }
+
         tmp = new Queue<string>(branchCache);
         foreach(var cmd in tmp){
             ret.Enqueue(cmd);
         }
+
         tmp = new Queue<string>(commandLines);
         foreach(var cmd in tmp){
             ret.Enqueue(cmd);
         }
         return ret;
+    }
+    public int Get_commandCachesCount(){
+        return commandCaches.Count;
     }
     
 }

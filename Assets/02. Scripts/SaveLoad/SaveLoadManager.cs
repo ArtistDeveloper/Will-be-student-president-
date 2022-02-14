@@ -1,5 +1,3 @@
-//#define SCENARIO_MASTER_TEST // 지워야 할 내용
-//#define STATUS // 지워야 할 내용
 using System;
 using System.IO;
 using System.Collections;
@@ -21,22 +19,11 @@ public class SaveLoadManager : MonoBehaviour
     {
         public List<Tuple<int, int>> happeningStream;       // 해프닝 발생 순서
         public int presentHappeningIdx;                     // 현재 진행중인 해프닝 번호
-        public List<string> txtScript;
-        #if SCENARIO_MASTER_TEST// 지워야 할 내용
-        public Queue<string> commandLines;
-        #else// 지워야 할 내용
-        public bool branchFlag;// 지워야 할 내용
-        public string question;// 지워야 할 내용
-        public List<string> answerList;// 지워야 할 내용
-        public List<string> branchFilePath;// 지워야 할 내용
-        #endif// 지워야 할 내용
+        public Queue<string> commandLines;                  // ScenarioMaster 저장 내용
+        public int commandCachesCount;                 // ScenarioMaster 저장 내용
 
         public Tuple<int, int, int, int> playerStatus;       // 사용자의 스탯(인맥, 언변, 평판, 자금)
 
-        #if SCENARIO_MASTER_TEST// 지워야 할 내용
-        #else// 지워야 할 내용
-        public List<Tuple<int, int, int, int>> choiceStatus;   // 선택지의 스탯(인맥, 언변, 평판, 자금) // 지워야 할 내용
-        #endif// 지워야 할 내용
         // 추가해야할 사항
         // 사용자가 본 대본번호(아직애매)
     }
@@ -75,24 +62,12 @@ public class SaveLoadManager : MonoBehaviour
         gameData.happeningStream = HappeningUtils.instance.GetHappeningStream();
         gameData.presentHappeningIdx = HappeningUtils.instance.GetPresentHappeningIdx();
 
-        #if SCENARIO_MASTER_TEST// 지워야 할 내용
-        //gameData.txtScript = ScenarioMaster.instance.Get_txtScripts();
+        // ScenarioMaster 저장 내용
         gameData.commandLines = ScenarioMaster.instance.Get_commandLines();
-        #else// 지워야 할 내용
-        gameData.txtScript = GetNextHappening.instance.Get_txtScripts();// 지워야 할 내용
-        gameData.branchFlag = GetNextHappening.instance.Get_branchFlag();// 지워야 할 내용
-        gameData.question = GetNextHappening.instance.Get_question();// 지워야 할 내용
-        gameData.answerList = GetNextHappening.instance.Get_answerList();// 지워야 할 내용
-        gameData.branchFilePath = GetNextHappening.instance.Get_branchFilePath();// 지워야 할 내용
-        #endif// 지워야 할 내용
+        gameData.commandCachesCount = ScenarioMaster.instance.Get_commandCachesCount();
 
-        #if STATUS// 지워야 할 내용
+        // StatusManager 저장 내용
         gameData.playerStatus = StatusManager.instance.SaveStatus();
-        #if SCENARIO_MASTER_TEST// 지워야 할 내용
-        #else// 지워야 할 내용
-        gameData.choiceStatus = GetNextHappening.instance.Get_statusValue();// 지워야 할 내용
-        #endif// 지워야 할 내용
-        #endif// 지워야 할 내용
 
         Debug.Log("이거 저장한다");
         Debug.Log(HappeningUtils.instance.GetHappeningStream().Count);
@@ -105,14 +80,14 @@ public class SaveLoadManager : MonoBehaviour
     // Start 버튼 눌렀을 때 onClick 함수
     public void OnClickStartButton(){
         HappeningUtils.instance.MakeNewProgress();
-        #if SCENARIO_MASTER_TEST// 지워야 할 내용
+        StartCoroutine(InitScenarioMasterCoroutine());
+        StartCoroutine(LoadStatusManagerCoroutine(new Tuple<int, int, int, int>(5,5,5,5))); // 스탯 초기값 설정
+    }
+
+    // HappeningUtils.cs의 happeningStream이 로딩될 때 까지 기다리는 코루틴
+    private IEnumerator InitScenarioMasterCoroutine(){
+        yield return new WaitUntil(() => HappeningUtils.instance.settingFlag);
         ScenarioMaster.instance.InitSettings();
-        #else// 지워야 할 내용
-        GetNextHappening.instance.InitSettings();// 지워야 할 내용
-        #endif// 지워야 할 내용
-        #if STATUS// 지워야 할 내용
-        StatusManager.instance.SetStatusValue(5,5,5,5); // 스텟 초기값 설정
-        #endif// 지워야 할 내용
     }
 
 
@@ -134,25 +109,12 @@ public class SaveLoadManager : MonoBehaviour
                 HappeningUtils.instance.SetHappeningStream(gameData.happeningStream);
                 HappeningUtils.instance.SetPresentHappeningIdx(gameData.presentHappeningIdx);
 
+                // ScenarioMaster 저장 내용
+                StartCoroutine(LoadScenarioMasterCoroutine(gameData.commandLines, gameData.commandCachesCount));
+
                 
-                #if SCENARIO_MASTER_TEST// 지워야 할 내용
-                //ScenarioMaster.instance.Set_txtScripts(gameData.txtScript);
-                ScenarioMaster.instance.Set_commandLines(gameData.commandLines);
-                #else// 지워야 할 내용
-                GetNextHappening.instance.Set_txtScripts(gameData.txtScript);// 지워야 할 내용
-                GetNextHappening.instance.Set_branchFlag(gameData.branchFlag);// 지워야 할 내용
-                GetNextHappening.instance.Set_question(gameData.question);// 지워야 할 내용
-                GetNextHappening.instance.Set_answerList(gameData.answerList);// 지워야 할 내용
-                GetNextHappening.instance.Set_branchFilePath(gameData.branchFilePath);// 지워야 할 내용
-                #endif// 지워야 할 내용
-                
-                #if STATUS// 지워야 할 내용
-                StatusManager.instance.LoadStatus(gameData.playerStatus);
-                #if SCENARIO_MASTER_TEST// 지워야 할 내용
-                #else// 지워야 할 내용
-                GetNextHappening.instance.Set_statusValue(gameData.choiceStatus);// 지워야 할 내용
-                #endif// 지워야 할 내용
-                #endif// 지워야 할 내용
+                // StatusManager 저장 내용
+                StartCoroutine(LoadStatusManagerCoroutine(gameData.playerStatus));
 
 
                 Debug.Log("이거 불러왔다");
@@ -170,5 +132,19 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log("로드에러메시지");
             Debug.Log(e.Message);
         }
+    }
+
+
+    // ANCHOR ScenarioMaster.cs에 값 로딩
+    private IEnumerator LoadScenarioMasterCoroutine(Queue<string> commandLines, int commandCachesCount){
+        yield return new WaitUntil(() => ScenarioMaster.instance.settingFlag);
+        ScenarioMaster.instance.Set_commandLines(commandLines);
+        ScenarioMaster.instance.Set_commandCachesCount(commandCachesCount);
+    }
+
+    // ANCHOR StatusManager.cs에 값 로딩
+    private IEnumerator LoadStatusManagerCoroutine(Tuple<int,int,int,int> status){
+        yield return new WaitUntil(() => StatusManager.instance.settingFlag);
+        StatusManager.instance.SetStatus(status.Item1, status.Item2, status.Item3, status.Item4);
     }
 }

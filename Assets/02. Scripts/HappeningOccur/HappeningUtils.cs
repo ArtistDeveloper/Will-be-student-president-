@@ -66,7 +66,7 @@ public class HappeningUtils : MonoBehaviour
     public String springVactionStart, springVactionEnd;
     private int smvs, smve, wtvs, wtve, spvs, spve; // int로 변환된 0년째 방학 날짜들
 
-
+    public bool settingFlag;
 
 
 
@@ -309,6 +309,10 @@ public class HappeningUtils : MonoBehaviour
             dateNow = happeningStream[i].Item1;
         }
         happeningStream = happeningStream.OrderBy(x => x.Item1).ThenBy(x => x.Item2).ToList();
+
+
+        // 로딩 다 됐는지 확인용 변수
+        settingFlag = true;
     }
 
 
@@ -349,6 +353,7 @@ public class HappeningUtils : MonoBehaviour
     public void SetHappeningStream(List<Tuple<int, int>> savedHappeningStream)
     {
         happeningStream = savedHappeningStream;
+        settingFlag = true;
     }
 
 
@@ -643,5 +648,11 @@ public class HappeningUtils : MonoBehaviour
         if (randomVal.Count == 0)
             return -1;
         return randomVal.ElementAt(random.Next(randomVal.Count));
+    }
+
+
+    // ANCHOR GetPresentHappeningTitle
+    public string GetPresentHappeningTitle(){
+        return happeningTitles[happeningStream[presentHappeningIdx].Item2];
     }
 }
