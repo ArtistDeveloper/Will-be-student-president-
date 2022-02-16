@@ -29,4 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scenes/1_Test Scenes/ScenarioMasterScene/GamePlayScene(ScenarioMaster).unity
     guid: 4ad0f8629bb3c0a43a4a4f924ff13f3d
+  - enabled: 1
+    path: Assets/01. Scenes/1_Test Scenes/Status/MainScreen(Status).unity
+    guid: 8cfc8b91abf0d6340bdb95e03ab3b3e3
+  - enabled: 1
+    path: Assets/01. Scenes/1_Test Scenes/Status/GamePlayScene(Status).unity
+    guid: 72934a6a8d88afc4b817dcd140d122a4
   m_configObjects: {}

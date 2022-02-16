@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_STATUS: 50
-  MAX_APPROVAL_RATING: 500
+  WHOLE_STUDENTS_NUMBER: 1000
   networkingContribution: 26
   eloquenceContribution: 28
   reputationContribution: 31
@@ -163,6 +163,7 @@ MonoBehaviour:
   reputationText: {fileID: 0}
   moneyText: {fileID: 0}
   approvalRatingText: {fileID: 0}
+  settingFlag: 0
 --- !u!4 &142942539
 Transform:
   m_ObjectHideFlags: 0
@@ -356,6 +357,7 @@ MonoBehaviour:
   defaultFolderPath: Assets/TextData/HappeningTxtScripts
   dialogText: {fileID: 0}
   nextDayWarning: {fileID: 0}
+  settingFlag: 0
 --- !u!1 &529591630
 GameObject:
   m_ObjectHideFlags: 0

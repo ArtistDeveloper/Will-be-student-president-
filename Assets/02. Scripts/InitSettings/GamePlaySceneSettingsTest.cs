@@ -38,5 +38,8 @@ public class GamePlaySceneSettingsTest : MonoBehaviour
         StatusManager.instance.SetTextComponent(networkingText, eloquenceText, reputationText, moneyText, approvalRatingText);
 
         yesButton.onClick.AddListener(ChoiceManager.instance.ExitChoice);
+
+        ScenarioMaster.instance.settingFlag = true; // GameManager로 옮겨야됨
+        StatusManager.instance.settingFlag = true; // GameManager로 옮겨야됨. 위에 bool변수랑 합치기
     }
 }

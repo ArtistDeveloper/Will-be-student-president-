@@ -14,5 +14,9 @@ public class MainScreenSettings : MonoBehaviour
         startButton.onClick.AddListener(SaveLoadManager.instance.OnClickStartButton);
         // SaveLoadManager의 onClickLoadButton과 MainScreen의 Load 버튼 연결
         loadButton.onClick.AddListener(SaveLoadManager.instance.OnClickLoadButton);
+
+        ScenarioMaster.instance.settingFlag = false; // GameManager로 옮겨야됨
+        StatusManager.instance.settingFlag = false; // GameManager로 옮겨야됨.
+        HappeningUtils.instance.settingFlag = false; // GameManager로 옮겨야됨.
     }
 }
