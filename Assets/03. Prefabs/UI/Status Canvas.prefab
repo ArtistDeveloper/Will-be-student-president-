@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 7639997348002348425}
   - component: {fileID: 7639997348002348426}
   - component: {fileID: 7639997348002348427}
-  - component: {fileID: 7639997348002348424}
+  - component: {fileID: 897958560}
   m_Layer: 5
   m_Name: Reputation Transparent Image
   m_TagString: Untagged
@@ -460,7 +460,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7639997348002348424
+--- !u!114 &897958560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -469,40 +469,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7639997348002348422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32bf75ec42145048929b7fe20a8e622, type: 3}
+  m_Script: {fileID: 11500000, guid: 93169c8b380a7664db9ef00ccf73e196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statValue: {fileID: 7639997349422218590}
   statClickEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7639997349710585646}
-        m_TargetAssemblyTypeName: OriginImgAnim, Assembly-CSharp
-        m_MethodName: CallCoHideOriginImg
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   statClickCancleEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7639997349710585646}
-        m_TargetAssemblyTypeName: OriginImgAnim, Assembly-CSharp
-        m_MethodName: CallCoShowOriginImg
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  testImage: {fileID: 7639997348002348427}
 --- !u!1 &7639997348323463910
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,8 +945,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 33.384003}
-  m_SizeDelta: {x: 0, y: -66.768}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 0, y: -50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7639997348727974989
 CanvasRenderer:
@@ -1864,6 +1840,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 9.000025, y: -154.07568}
+  m_AnchoredPosition: {x: 9, y: -154.07568}
   m_SizeDelta: {x: 165, y: 155.50598}
   m_Pivot: {x: 0, y: 0.5}

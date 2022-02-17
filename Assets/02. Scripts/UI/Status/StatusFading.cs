@@ -9,21 +9,27 @@ using DG.Tweening;
 
 namespace UI.status
 {
-    public class StatusClick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class StatusFading : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        [SerializeField] private UnityEvent statClickEvent;
-        [SerializeField] private UnityEvent statClickCancleEvent;
-
-        public Image testImage;
+        public Image halfTransparentImage;
 
         private Tween fadeOutTween;
         private Tween fadeInTween;
 
         private bool isPressed;
-
+        private StatusKinds statusKind;
+        
+        private StatClickSubject statClickSubject;
 
         private void Start()
         {
+            Transform rootParent = transform.parent.parent;
+            statClickSubject = rootParent.GetComponent<StatClickSubject>();
+            
+            // 스탯의 종류에 맞게 delegate에 등록되어 있는 함수를 호출할 수 있도록 값을 가져옴.
+            Stat stat = new Stat();
+            statusKind = stat.DistinguishStatkinds(transform.parent.name);
+
             StartCoroutine(CoCheckClickEvent());
         }
 
@@ -49,6 +55,7 @@ namespace UI.status
                     }
 
                     FadeOut();
+                    statClickSubject.StatClickDelegateList[(int)statusKind]();
                 }
                 else
                 {
@@ -64,8 +71,8 @@ namespace UI.status
                         fadeOutTween.Kill(false);
                         fadeOutTween = null;
 
-                        Debug.Log("Fade In 호출중");
                         FadeIn();
+                        statClickSubject.StatClickCancleDelegateList[(int)statusKind]();
                     }
                 }
             }
@@ -75,20 +82,18 @@ namespace UI.status
         public void OnPointerDown(PointerEventData eventData)
         {
             isPressed = true;
-            statClickEvent.Invoke();
         }
 
 
         public void OnPointerUp(PointerEventData eventData)
         {
             isPressed = false;
-            statClickCancleEvent.Invoke();
         }
 
 
         public void FadeIn()
         {
-            fadeInTween = testImage.DOFade(1, 3);
+            fadeInTween = halfTransparentImage.DOFade(1, 1);
             fadeInTween.onComplete += () =>
             {
                 fadeInTween.Kill(false);
@@ -100,14 +105,13 @@ namespace UI.status
         public void FadeOut()
         {
             //Fade Out은 끝나도, 마우스 클릭이 계속 되고있으면 FadeIn이 실행되면 안되기에 OnComplete에 다른 것을 붙여주지 않는다.
-            Debug.Log("호출됐는데 왜그랭");
-            fadeOutTween = testImage.DOFade(0, 3);
+            fadeOutTween = halfTransparentImage.DOFade(0, 1);
         }
 
 
         private void Fade(float endValue, float duration)
         {
-            // fadeTween = testImage.DOFade(endValue, duration);
+            // fadeTween = halfTransparentImage.DOFade(endValue, duration);
         }
     }
 }
