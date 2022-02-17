@@ -93,7 +93,7 @@ namespace UI.status
 
         public void FadeIn()
         {
-            fadeInTween = halfTransparentImage.DOFade(1, 1);
+            fadeInTween = halfTransparentImage.DOFade(0.5f, 1);
             fadeInTween.onComplete += () =>
             {
                 fadeInTween.Kill(false);
