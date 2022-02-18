@@ -54,8 +54,6 @@ namespace UI.status
 
         public void CallCoHideOriginImg()
         {
-            Debug.Log("이게 호출되네;;; ㄹㅈㄷ");
-
             if (originImgCoroutine != null)
             {
                 StopCoroutine(originImgCoroutine);

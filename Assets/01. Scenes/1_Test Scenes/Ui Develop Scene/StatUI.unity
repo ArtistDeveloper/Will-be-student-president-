@@ -930,17 +930,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &897958562 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7639997348002348427, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-  m_PrefabInstance: {fileID: 7639997349105668513}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &940641027
 GameObject:
   m_ObjectHideFlags: 0
@@ -2524,14 +2513,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1748138769}
     m_Modifications:
-    - target: {fileID: 897958560, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-      propertyPath: halfTransparentImage
-      value: 
-      objectReference: {fileID: 897958562}
-    - target: {fileID: 7639997347792227523, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7639997347962033286, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
       propertyPath: m_Name
       value: Status Canvas
@@ -2620,34 +2601,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7639997348397558733, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.49658203
-      objectReference: {fileID: 0}
-    - target: {fileID: 7639997348643165832, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7639997349438814778, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
---- !u!1 &7639997349105668514 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7639997348727974984, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
-  m_PrefabInstance: {fileID: 7639997349105668513}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7639997349105668515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7639997349105668514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa9af96265e90e0419ae058a7cdb041f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

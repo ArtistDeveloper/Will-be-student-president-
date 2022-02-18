@@ -21,7 +21,7 @@ namespace UI.status
             InitList();
         }
 
-        public void RegisterObserver(StatusKinds statusKinds, StatEvent function, StatEvetType statEvetType) // 원래는 statclick
+        public void RegisterObserver(StatusKinds statusKinds, StatEvent function, StatEvetType statEvetType)// 원래는 statclick
         {
 
             if (statEvetType == StatEvetType.Click)
@@ -51,9 +51,9 @@ namespace UI.status
                 // if (StatClickDelegateList[(int)statusKinds].GetInvocationList() != null)
                 if (StatClickCancleDelegateList[(int)statusKinds] != null)
                 {
-                    foreach (StatClick n in StatClickCancleDelegateList[(int)statusKinds].GetInvocationList())
+                    foreach (StatClickCancle n in StatClickCancleDelegateList[(int)statusKinds].GetInvocationList())
                     {
-                        if (n == click)
+                        if (n == clickCancle)
                         {
                             Debug.Log("이미 해당 함수가 Delegate에 존재하고 있음");
                             return;
