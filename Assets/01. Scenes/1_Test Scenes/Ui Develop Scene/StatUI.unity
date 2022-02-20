@@ -2513,6 +2513,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1748138769}
     m_Modifications:
+    - target: {fileID: 7639997347801533520, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533520, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533520, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 196
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347801533521, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7639997347962033286, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
       propertyPath: m_Name
       value: Status Canvas
@@ -2599,6 +2639,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7639997347962033289, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7639997347962033291, guid: 90b276569f53ed24e81c2848f5d87f9b, type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

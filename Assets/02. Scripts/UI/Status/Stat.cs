@@ -10,15 +10,16 @@ namespace UI.status
         Reputation,
         Eloquence,
         Friends,
-        Money
+        Money,
+        None
     }
 
     public class Stat
     {
-        private StatusKinds statusKind;
-
-        public StatusKinds DistinguishStatkinds(string parentName)
+        public static StatusKinds DistinguishStatkinds(string parentName)
         {    
+            StatusKinds statusKind = StatusKinds.None;
+
             switch (parentName)
             {
                 case "Reputation":

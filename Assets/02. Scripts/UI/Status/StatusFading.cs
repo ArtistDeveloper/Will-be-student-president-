@@ -27,9 +27,8 @@ namespace UI.status
             statClickSubject = rootParent.GetComponent<StatClickSubject>();
             
             // 스탯의 종류에 맞게 delegate에 등록되어 있는 함수를 호출할 수 있도록 값을 가져옴.
-            Stat stat = new Stat();
-            statusKind = stat.DistinguishStatkinds(transform.parent.name);
-
+            statusKind = Stat.DistinguishStatkinds(transform.parent.name);
+            
             StartCoroutine(CoCheckClickEvent());
         }
 
@@ -54,7 +53,8 @@ namespace UI.status
                         continue;
                     }
 
-                    FadeOut();
+                    // FadeOut();
+                    fadeOutTween = FadingUtil.Fade(0, 1f, halfTransparentImage);
                     statClickSubject.StatClickDelegateList[(int)statusKind]();
                 }
                 else
@@ -71,13 +71,13 @@ namespace UI.status
                         fadeOutTween.Kill(false);
                         fadeOutTween = null;
 
-                        FadeIn();
+                        // FadeIn();
+                        fadeInTween = FadingUtil.Fade(0.5f, 1f, halfTransparentImage);
                         statClickSubject.StatClickCancleDelegateList[(int)statusKind]();
                     }
                 }
             }
         }
-
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -88,30 +88,6 @@ namespace UI.status
         public void OnPointerUp(PointerEventData eventData)
         {
             isPressed = false;
-        }
-
-
-        public void FadeIn()
-        {
-            fadeInTween = halfTransparentImage.DOFade(0.5f, 1);
-            fadeInTween.onComplete += () =>
-            {
-                fadeInTween.Kill(false);
-                fadeInTween = null;
-            };
-        }
-
-
-        public void FadeOut()
-        {
-            //Fade Out은 끝나도, 마우스 클릭이 계속 되고있으면 FadeIn이 실행되면 안되기에 OnComplete에 다른 것을 붙여주지 않는다.
-            fadeOutTween = halfTransparentImage.DOFade(0, 1);
-        }
-
-
-        private void Fade(float endValue, float duration)
-        {
-            // fadeTween = halfTransparentImage.DOFade(endValue, duration);
         }
     }
 }

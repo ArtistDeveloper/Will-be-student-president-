@@ -13,10 +13,11 @@ namespace UI.status
         private Image originImg;
         private Coroutine originImgCoroutine;
         private const int StatMax = 100;
-
         private StatClickSubject statClickSubject;
-
         private StatusKinds statusKind;
+
+        // private
+
 
         private void Start()
         {
@@ -28,16 +29,15 @@ namespace UI.status
             originImg.type = Image.Type.Filled;
             originImg.fillMethod = Image.FillMethod.Vertical;
             originImg.fillOrigin = (int)Image.OriginVertical.Bottom;
-            
+
             // StatClickSubject 참조 가져오기.
             Transform rootParent = transform.parent.parent;
             statClickSubject = rootParent.GetComponent<StatClickSubject>();
 
             // UI 종류에 맞게 애니메이션 실행될 수 있도록 함.
-            Stat stat = new Stat();
-            statusKind = stat.DistinguishStatkinds(transform.parent.name);
-            statClickSubject.RegisterObserver(statusKind, CallCoHideOriginImg, StatEvetType.Click);
-            statClickSubject.RegisterObserver(statusKind, CallCoShowOriginImg, StatEvetType.ClickCancle);
+            statusKind = Stat.DistinguishStatkinds(transform.parent.name);
+            statClickSubject.RegisterObserver(statusKind, CallHideOriginImg, StatEvetType.Click);
+            statClickSubject.RegisterObserver(statusKind, CallShowOriginImg, StatEvetType.ClickCancle);
         }
 
 
@@ -51,85 +51,95 @@ namespace UI.status
             }
         }
 
-
-        public void CallCoHideOriginImg()
+        public void CallHideOriginImg()
         {
-            if (originImgCoroutine != null)
-            {
-                StopCoroutine(originImgCoroutine);
-                originImgCoroutine = null;
-            }
-            originImgCoroutine = StartCoroutine(CoHideOriginImg());
+            FadingUtil.Fade(0f, 1f, originImg);
+        }
+
+        public void CallShowOriginImg()
+        {
+            FadingUtil.Fade(1f, 1f, originImg);
         }
 
 
-        public void CallCoShowOriginImg()
-        {
-            if (originImgCoroutine != null)
-            {
-                StopCoroutine(originImgCoroutine);
-                originImgCoroutine = null;
-            }
-            originImgCoroutine = StartCoroutine(CoShowOriginImg());
-        }
+        // public void CallCoHideOriginImg()
+        // {
+        //     if (originImgCoroutine != null)
+        //     {
+        //         StopCoroutine(originImgCoroutine);
+        //         originImgCoroutine = null;
+        //     }
+        //     originImgCoroutine = StartCoroutine(CoHideOriginImg());
+        // }
 
 
-        private IEnumerator CoHideOriginImg()
-        {
-            Color changeColor = originImg.color;
-
-            // lerp값 조절용
-            float elapsedTime = 0;
-            float progress = 1;
-
-            while (changeColor.a >= 0.0f)
-            {
-                changeColor.a = Mathf.Lerp(0.0f, changeColor.a, progress);
-
-                elapsedTime += Time.unscaledDeltaTime;
-                progress = progress - elapsedTime / 5;
-
-                originImg.color = changeColor;
-
-                yield return null;
-            }
-
-            yield return null;
-        }
+        // public void CallCoShowOriginImg()
+        // {
+        //     if (originImgCoroutine != null)
+        //     {
+        //         StopCoroutine(originImgCoroutine);
+        //         originImgCoroutine = null;
+        //     }
+        //     originImgCoroutine = StartCoroutine(CoShowOriginImg());
+        // }
 
 
-        // FIXME : 최적화 필요
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator CoShowOriginImg()
-        {
-            Color changeColor = originImg.color;
-            Debug.Log($"OriginImgColor의 a값 : {originImg.color.a}");
+        // private IEnumerator CoHideOriginImg()
+        // {
+        //     Color changeColor = originImg.color;
 
-            // lerp값 조절용
-            float elapsedTime = 0;
-            float progress = 0;
+        //     // lerp값 조절용
+        //     float elapsedTime = 0;
+        //     float progress = 1;
 
-            while (changeColor.a < 255)
-            {
-                Debug.Log($"changeColor.a : {changeColor.a}");
-                Debug.Log($"progress : {progress}");
+        //     while (changeColor.a >= 0.0f)
+        //     {
+        //         changeColor.a = Mathf.Lerp(0.0f, changeColor.a, progress);
 
-                changeColor.a = Mathf.Lerp(changeColor.a, 255f, progress);
+        //         elapsedTime += Time.unscaledDeltaTime;
+        //         progress = progress - elapsedTime / 5;
 
-                elapsedTime += Time.unscaledDeltaTime;
-                progress = elapsedTime / 50;
+        //         originImg.color = changeColor;
 
-                originImg.color = changeColor;
-                Debug.Log($"originImg.color : {originImg.color}");
+        //         yield return null;
+        //     }
 
-                yield return null;
-            }
+        //     yield return null;
+        // }
 
-            yield return null;
-        }
+
+        // // FIXME : 최적화 필요
+        // /// <summary>
+        // /// 
+        // /// </summary>
+        // /// <returns></returns>
+        // private IEnumerator CoShowOriginImg()
+        // {
+        //     Color changeColor = originImg.color;
+        //     Debug.Log($"OriginImgColor의 a값 : {originImg.color.a}");
+
+        //     // lerp값 조절용
+        //     float elapsedTime = 0;
+        //     float progress = 0;
+
+        //     while (changeColor.a < 255)
+        //     {
+        //         Debug.Log($"changeColor.a : {changeColor.a}");
+        //         Debug.Log($"progress : {progress}");
+
+        //         changeColor.a = Mathf.Lerp(changeColor.a, 255f, progress);
+
+        //         elapsedTime += Time.unscaledDeltaTime;
+        //         progress = elapsedTime / 50;
+
+        //         originImg.color = changeColor;
+        //         Debug.Log($"originImg.color : {originImg.color}");
+
+        //         yield return null;
+        //     }
+
+        //     yield return null;
+        // }
 
 
         // FIXME : while문 최적화 필요
