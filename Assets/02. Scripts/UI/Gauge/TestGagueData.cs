@@ -26,14 +26,34 @@ public class TestGagueData : MonoBehaviour
         get{return nowApprovalRating;}
     }
 
-    public int[] GOAL_SUPPORTERS_NUM;
+    List<float> GOAL_SUPPORTERS_NUM = new List<float>();
     public int WHOAL_STUDENTS_NUM;
 
+    void Start()
+    {
+        InitGoalSupportersNum();
+    }
+
+    void InitGoalSupportersNum()
+    {
+       GOAL_SUPPORTERS_NUM = SetGoalSupportersNum.instance.GetStageSupporters();
+       float preStageSupporters = GOAL_SUPPORTERS_NUM[0];
+       for(int i = 1; i < GOAL_SUPPORTERS_NUM.Count; i++)
+       {
+           GOAL_SUPPORTERS_NUM[i] += preStageSupporters;
+           preStageSupporters = GOAL_SUPPORTERS_NUM[i];
+       }
+
+       for(int i = 0; i<GOAL_SUPPORTERS_NUM.Count; i++)
+       {
+           Debug.Log(GOAL_SUPPORTERS_NUM[i]);
+       }
+    }
     public void SetApprovalRating()
     {
         supportersNum = Math.Min((int)(
             networking * networkingContribution + eloquence * eloquenceContribution + reputation * reputationContribution + money * moneyContribution),
-            GOAL_SUPPORTERS_NUM[stageNum]
+            (int)GOAL_SUPPORTERS_NUM[stageNum]
         );
         //PrintApprovalRatinge();
 	    ChangeGaugeUI();
@@ -48,8 +68,6 @@ public class TestGagueData : MonoBehaviour
     float changedFillAmount = 0;
     Tween gaugeTween;
 
-    
-    
     public void ChangeGaugeUI()
     {
         nowApprovalRating = (float)supportersNum/GOAL_SUPPORTERS_NUM[stageNum];

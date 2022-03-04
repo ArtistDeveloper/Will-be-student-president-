@@ -1,0 +1,284 @@
+@ 1
+getstatus 10 0 0 0
+
+
+@ 2
+getstatus 0 0 -10 0
+getstatus 10 0 0 0
+
+
+@ 3
+getstatus 0 0 -10 0
+getstatus 0 10 0 0
+
+
+@ 4
+getstatus 0 0 0 -10
+
+
+@ 5
+getstatus 0 10 0 0
+
+
+@ 6
+
+
+
+@ 7
+getstatus 0 10 0 0
+getstatus 0 0 -10 0
+
+
+@ 8
+getstatus 10 0 0 0
+
+
+@ 9
+getstatus 0 0 0 -10
+getstatus 0 0 10 0
+
+
+@ 10
+getstatus 0 10 0 0
+getstatus 10 0 0 0
+
+
+@ 11
+getstatus 0 10 0 0
+
+
+@ 12
+getstatus 0 0 10 0
+getstatus 10 0 0 0
+
+
+@ 13
+getstatus 0 0 -10 0
+
+
+@ 14
+getstatus -10 0 0 0
+getstatus 0 -10 0 0
+getstatus 0 0 -10 0
+
+
+@ 15
+getstatus 10 0 0 0
+
+
+@ 16
+
+
+
+@ 17
+getstatus 10 0 0 0
+getstatus 0 10 0 0
+getstatus 0 0 10 0
+
+
+@ 18
+
+
+
+@ 19
+getstatus 0 0 0 -10
+getstatus 0 0 -10 0
+
+
+@ 20
+
+
+
+@ 21
+
+
+
+@ 22
+
+
+
+@ 23
+
+
+
+@ 24
+getstatus 0 0 0 -10
+
+
+@ 25
+getstatus 10 0 0 0
+getstatus 0 0 10 0
+
+
+@ 26
+getstatus 10 0 0 0
+getstatus 0 0 10 0
+
+
+@ 27
+getstatus 10 0 0 0
+getstatus 0 10 0 0
+getstatus 0 0 10 0
+
+
+@ 28
+getstatus 0 -10 0 0
+getstatus 0 0 -10 0
+
+
+@ 29
+getstatus 0 0 0 10
+getstatus 0 0 10 0
+
+
+@ 30
+getstatus 0 10 0 0
+
+
+@ 31
+getstatus 10 0 0 0
+getstatus 0 0 10 0
+getstatus 0 0 0 -10
+
+
+@ 32
+getstatus 0 0 0 10
+getstatus 0 0 -10 0
+
+
+@ 33
+getstatus 0 0 0 -10
+
+
+@ 34
+getstatus 0 0 0 -10
+
+
+@ 35
+getstatus 0 -10 0 0
+getstatus 0 0 -10 0
+
+
+@ 36
+getstatus 0 0 10 0
+
+
+@ 37
+getstatus 0 0 0 0
+
+
+@ 38
+getstatus 0 0 -10 0
+
+
+@ 39
+getstatus 0 0 10 0
+getstatus 0 10 0 0
+getstatus 10 0 0 0
+
+
+@ 40
+
+
+
+@ 41
+
+
+
+@ 42
+
+
+
+@ 43
+
+
+
+@ 44
+
+
+
+@ 45
+
+
+
+@ 46
+
+
+
+@ 47
+getstatus 10 0 0 0
+getstatus 0 0 10 0
+
+
+@ 48
+
+
+
+@ 49
+
+
+
+@ 50
+getstatus 0 0 -10 0
+getstatus 0 0 0 -10
+
+
+@ 51
+
+
+
+@ 52
+
+
+
+@ 53
+getstatus 10 0 0 0
+
+
+@ 54
+
+
+
+@ 55
+
+
+
+@ 56
+
+
+
+@ 57
+
+
+
+@ 58
+
+
+
+@ 59
+
+
+
+@ 60
+
+
+
+@ 61
+
+
+
+@ 62
+
+
+
+@ 63
+getstatus 0 10 0 0
+getstatus 0 0 10 0
+
+
+@ 64
+getstatus 0 10 0 0
+getstatus 0 0 10 0
+
+
+
