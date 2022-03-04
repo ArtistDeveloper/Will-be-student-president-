@@ -51,7 +51,9 @@ public class BackgroundManager : MonoBehaviour
 
     [Header("Dictinary에 들어갈 Key, value")]
     public List<string> bgName;
-    public List<Sprite> bg;
+    public List<Sprite> bgSource;
+    
+    private Image bg;
 
     private static BackgroundManager _instance;
 
@@ -79,6 +81,15 @@ public class BackgroundManager : MonoBehaviour
         return imageDict[bgName];
     }
 
+
+    public void ChangeBackground(string bgName)
+    {
+        Sprite changeSource = GetBackground(bgName);
+
+        bg.sprite = changeSource;
+    }
+
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -90,16 +101,27 @@ public class BackgroundManager : MonoBehaviour
         _instance = this;
         Initialize();
         SubstituteImage();
+        bg = GetComponent<Image>();
     }
+
+
+    private void Start()
+    {
+        ChangeBackground("Test");
+    }
+
+    // TODO : 이미지 효과 제작하기 shake, fadein, fadeout, 
+
 
     private void Initialize()
     {
         imageDict.Clear();
     }
 
+
     private void SubstituteImage()
     {
-        foreach (var item in bgName.Zip(bg, (name, sprite) => new { Name = name, Sprite = sprite }))
+        foreach (var item in bgName.Zip(bgSource, (name, sprite) => new { Name = name, Sprite = sprite }))
         {
             imageDict.Add(item.Name, item.Sprite);
         }
