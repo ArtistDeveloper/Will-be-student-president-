@@ -35,4 +35,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scenes/1_Test Scenes/Status/GamePlayScene(Status).unity
     guid: 72934a6a8d88afc4b817dcd140d122a4
+  - enabled: 1
+    path: Assets/01. Scenes/0_BuildScenes/InagmeScene.unity
+    guid: 11f8b057bc217db498ff2f2b9d810a74
+  - enabled: 1
+    path: Assets/01. Scenes/1_Test Scenes/BackgroundUtil/BackgroundTestScene.unity
+    guid: d75c8d74104cac443b1d09b014055b19
   m_configObjects: {}
