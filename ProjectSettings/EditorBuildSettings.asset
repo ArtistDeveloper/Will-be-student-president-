@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/01. Scenes/0_BuildScenes/MainScreen.unity
     guid: 01472c78b7b9a23499fe5c9602a51553
   - enabled: 1
+    path: Assets/01. Scenes/0_BuildScenes/InagmeScene.unity
+    guid: 11f8b057bc217db498ff2f2b9d810a74
+  - enabled: 1
+    path: Assets/01. Scenes/0_BuildScenes/IngameScene.unity
+    guid: bc9e7d9df37baf14e958c4bb864a2d62
+  - enabled: 1
     path: Assets/01. Scenes/1_Test Scenes/Ui(TextOutputTest).unity
     guid: 69c789aab615ea049a7ae215d9dfda82
   - enabled: 1
@@ -35,9 +41,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01. Scenes/1_Test Scenes/Supporters/Supporters.unity
     guid: d0a630a637684b94bb51e122791a65a2
-  - enabled: 0
-    path: Assets/01. Scenes/1_Test Scenes/Supporters/StageSupportersTestScene.unity
-    guid: 4fd617a8d03bab04aace89f86c595bec
   - enabled: 1
     path: Assets/01. Scenes/1_Test Scenes/Ui Develop Scene/TestGaugeUI.unity
     guid: 2debf6a342f93ec4baf1009d42c28398

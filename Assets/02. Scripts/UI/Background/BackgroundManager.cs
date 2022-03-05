@@ -85,7 +85,7 @@ public class BackgroundManager : MonoBehaviour
     public void ChangeBackground(string bgName)
     {
         Sprite changeSource = GetBackground(bgName);
-
+        
         bg.sprite = changeSource;
     }
 
