@@ -17,7 +17,7 @@ public class GamePlaySceneSettingsTest : MonoBehaviour
     public Text reputationText;
     public Text moneyText;
     public Text approvalRatingText;
-    // public Button yesButton;
+    //public Button yesButton;
 
 
     // Start is called before the first frame update
@@ -37,7 +37,7 @@ public class GamePlaySceneSettingsTest : MonoBehaviour
         ScenarioMaster.instance.dialogText = message.GetComponent<Text>();
         StatusManager.instance.SetTextComponent(networkingText, eloquenceText, reputationText, moneyText, approvalRatingText);
 
-        // yesButton.onClick.AddListener(ChoiceManager.instance.ExitChoice);
+        //yesButton.onClick.AddListener(ChoiceManager.instance.ExitChoice);
 
         ScenarioMaster.instance.settingFlag = true; // GameManager로 옮겨야됨
         StatusManager.instance.settingFlag = true; // GameManager로 옮겨야됨. 위에 bool변수랑 합치기

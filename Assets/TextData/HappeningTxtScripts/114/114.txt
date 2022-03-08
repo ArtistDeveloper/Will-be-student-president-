@@ -1,5 +1,6 @@
 // 일반 대사 명령어
 text A : asdf
+bg ball
 text B : asdf
 
 // 스테이터스 획득 명령어

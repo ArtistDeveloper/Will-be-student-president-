@@ -469,6 +469,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Status Canvas_new
       objectReference: {fileID: 0}
+    - target: {fileID: 5553619808354354264, guid: 42a58571bfbf5bd4890aeb63b64d8c90, type: 3}
+      propertyPath: activeOption.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553619808354354264, guid: 42a58571bfbf5bd4890aeb63b64d8c90, type: 3}
+      propertyPath: contentsPanels.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5553619808354354264, guid: 42a58571bfbf5bd4890aeb63b64d8c90, type: 3}
+      propertyPath: contentsPanels.Array.data[0]
+      value: 
+      objectReference: {fileID: 8522618257732652689}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42a58571bfbf5bd4890aeb63b64d8c90, type: 3}
 --- !u!224 &493575385 stripped
@@ -4496,7 +4508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077c5384acb1fc54faf9c7b62925303e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetScene: MainScreen(ScenarioMaster)
+  targetScene: MainScreen
 --- !u!222 &8522618259382014178
 CanvasRenderer:
   m_ObjectHideFlags: 0
