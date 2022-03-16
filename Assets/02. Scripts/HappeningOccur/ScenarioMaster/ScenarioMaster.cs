@@ -29,7 +29,7 @@ public class ScenarioMaster : MonoBehaviour
 
     // ANCHOR top
     public string defaultFolderPath; // 이벤트 대화들을 저장하는 파일들의 기본 폴더 경로
-    public enum commandType { text, endtext, get_status, branch, bg, error }; // 명령어 type
+    public enum commandType { Text, EndText, GetStatus, Branch, Bg, Sound, Error }; // 명령어 type
 
 
     // 저장해야 할 내용들
@@ -150,36 +150,35 @@ public class ScenarioMaster : MonoBehaviour
     /// <returns>commandType(명령어 타입 enum)</returns>
     private commandType ExecuteCommand(string command)
     {
-        string[] cmdtmp = command.Split(' ');
-        string type = cmdtmp[0];
+        string[] args = command.Split(' ');
         string contents = "";
-        if (cmdtmp.Count() > 1)
+        if (args.Count() > 1)
         {
             contents = command.Substring(command.IndexOf(" ") + 1);
         }
-        switch (type)
+        switch (args[0])
         {
             case "text":
                 txtScripts.Add(contents);
                 commandCaches.Enqueue(command);
-                return commandType.text;
+                PrintScript();
+                return commandType.Text;
             case "endtext":
                 endText = true;
                 commandCaches.Enqueue(command);
-                return commandType.endtext;
+                return commandType.EndText;
             case "getstatus":
-                cmdtmp = contents.Split(' ');
                 StatusManager.instance.ChangeStatus(
-                    Int32.Parse(cmdtmp[0]),
-                    Int32.Parse(cmdtmp[1]),
-                    Int32.Parse(cmdtmp[2]),
-                    Int32.Parse(cmdtmp[3])
+                    Int32.Parse(args[1]),
+                    Int32.Parse(args[2]),
+                    Int32.Parse(args[3]),
+                    Int32.Parse(args[4])
                 );
-                return commandType.get_status;
+                return commandType.GetStatus;
             case "branch":
                 branchCache.Enqueue(command);
-                int count = int.Parse(cmdtmp[1]); // 선택지 개수
-                ChoiceManager.instance.Set_question(command.Substring(command.IndexOf(cmdtmp[1]) + 2));
+                int count = int.Parse(args[1]); // 선택지 개수
+                ChoiceManager.instance.Set_question(command.Substring(command.IndexOf(args[1]) + 2));
                 // 선택지 텍스트 채우기
                 ChoiceManager.instance.Clear_answerList(); // IndexOutOfRange 에러 해결 코드
                 for (int i = 0; i < count; i++)
@@ -194,13 +193,25 @@ public class ScenarioMaster : MonoBehaviour
                     branchFilePath[i] = commandLines.Dequeue();
                 }
                 StartCoroutine(BranchWaitCoroutine());
-                return commandType.branch;
+                return commandType.Branch;
             case "bg":
-                // 백그라운드클래스.instance.함수(cmdtmp[1]); // 주석해제, 클래스명, 함수명 바꾸기
+                if (args.Count() == 2)
+                {
+                    BackgroundManager.Instance.ChangeBackground(args[1]);
+                }
+                else if (args.Count() == 3)
+                {
+                    // TODO 배경화면 오버라이딩 함수
+                    // 오버라이딩, 배경화면 변경 이펙트 추가
+                    // BackgroundManager.Instance.ChangeBackground(cmdtmp[1], cmdtmp[2]);
+                }
                 commandCaches.Enqueue(command);
-                return commandType.bg;
+                return commandType.Bg;
+            case "sound":
+
+                return commandType.Sound;
             default:
-                return commandType.error;
+                return commandType.Error;
         }
 
     }
@@ -222,21 +233,19 @@ public class ScenarioMaster : MonoBehaviour
                 string command = commandLines.Dequeue();
                 commandType cmdtype = ExecuteCommand(command);
                 Debug.Log(cmdtype);
-                if (cmdtype == commandType.text || cmdtype == commandType.endtext)
-                {
-                    PrintScript();
-                    break;
-                }
-                else if (cmdtype == commandType.branch)
+                if (cmdtype == commandType.Text ||
+                    cmdtype == commandType.EndText ||
+                    cmdtype == commandType.Branch)
                 {
                     break;
                 }
-                else if(cmdtype == commandType.error)
+                else if (cmdtype == commandType.Error)
                 {
                     Debug.Log(cmdtype);
                     break;
                 }
-                else{
+                else
+                {
                     continue;
                 }
             }
@@ -267,11 +276,13 @@ public class ScenarioMaster : MonoBehaviour
     /// <param name="present">현재 대화를 출력</param>
     public void PrintScript(bool backLog = false, bool present = false)
     {
-        if(present){
+        if (present)
+        {
             if (txtScriptsIndex > 0)
             {
                 Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex - 1]);
-                StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex - 1]));
+                MessageSystem.Instance.UseTypeSentnece(txtScripts[txtScriptsIndex - 1]);
+                //StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex - 1]));
             }
         }
         else if (backLog == false)
@@ -279,7 +290,8 @@ public class ScenarioMaster : MonoBehaviour
             if (txtScriptsIndex < txtScripts.Count)
             {
                 Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
-                StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
+                MessageSystem.Instance.UseTypeSentnece(txtScripts[txtScriptsIndex]);
+                //StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
                 txtScriptsIndex++;
                 nextDayFlag = false;
             }
@@ -290,7 +302,7 @@ public class ScenarioMaster : MonoBehaviour
                 if (nextDayFlag)
                 {
                     HappeningUtils.instance.IncreaseHappeningIdx();
-                 ReadPresentHappening();
+                    ReadPresentHappening();
                     nextDayFlag = false;
                 }
                 else
@@ -307,7 +319,8 @@ public class ScenarioMaster : MonoBehaviour
             {
                 txtScriptsIndex -= 2;
                 Debug.Log("" + txtScriptsIndex + "번째 대화 | " + txtScripts[txtScriptsIndex]);
-                StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
+                MessageSystem.Instance.UseTypeSentnece(txtScripts[txtScriptsIndex]);
+                //StartCoroutine(TypingDialogCoroutine(txtScripts[txtScriptsIndex]));
                 txtScriptsIndex++;
             }
             nextDayFlag = false;
@@ -358,7 +371,8 @@ public class ScenarioMaster : MonoBehaviour
 
 
     // ANCHOR 로딩 관련 함수들
-    public void Set_commandLines(Queue<string> data){
+    public void Set_commandLines(Queue<string> data)
+    {
         txtScriptsIndex = 0;
         txtScripts.Clear();
         branchCache.Clear();
@@ -377,28 +391,33 @@ public class ScenarioMaster : MonoBehaviour
     }
 
     // ANCHOR 저장 관련 함수들
-    public Queue<string> Get_commandLines(){
+    public Queue<string> Get_commandLines()
+    {
         // 오류 수정
         Queue<string> ret = new Queue<string>(), tmp;
 
         tmp = new Queue<string>(commandCaches);
-        foreach(var cmd in tmp){
+        foreach (var cmd in tmp)
+        {
             ret.Enqueue(cmd);
         }
 
         tmp = new Queue<string>(branchCache);
-        foreach(var cmd in tmp){
+        foreach (var cmd in tmp)
+        {
             ret.Enqueue(cmd);
         }
 
         tmp = new Queue<string>(commandLines);
-        foreach(var cmd in tmp){
+        foreach (var cmd in tmp)
+        {
             ret.Enqueue(cmd);
         }
         return ret;
     }
-    public int Get_commandCachesCount(){
+    public int Get_commandCachesCount()
+    {
         return commandCaches.Count;
     }
-    
+
 }
