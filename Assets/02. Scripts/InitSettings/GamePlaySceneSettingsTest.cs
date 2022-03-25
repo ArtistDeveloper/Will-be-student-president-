@@ -29,7 +29,8 @@ public class GamePlaySceneSettingsTest : MonoBehaviour
         scriptBackButton.onClick.AddListener(ScenarioMaster.instance.OnClickBackButton);
 
         // Save 버튼과 SaveLoadManager의 SaveGameData와 연결
-        saveButton.onClick.AddListener(SaveLoadManager.instance.SaveGameData);
+        //saveButton.onClick.AddListener(SaveLoadManager.instance.SaveGameData);
+        // 2022.03.02 주석처리로 변경 (-지연)
 
         // 한번더누르면 다음날 안내 panel과 GetNextHappening의 nextDayWarning 연결
         ScenarioMaster.instance.nextDayWarning = nextDayWarningPanel;
